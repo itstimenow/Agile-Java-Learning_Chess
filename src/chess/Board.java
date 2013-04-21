@@ -37,48 +37,48 @@ public class Board {
      * Initializes the white-side rank where the king is in, i.e. rank #1.
      */
     private void initializeWhiteKingRank() {
-        initializeKingRank(Piece.WHITE_COLOR);
+        int rank = 1;
+        setPosition('a', rank, Piece.createWhiteRook());
+        setPosition('b', rank, Piece.createWhiteKnight());
+        setPosition('c', rank, Piece.createWhiteBishop());
+        setPosition('d', rank, Piece.createWhiteQueen());
+        setPosition('e', rank, Piece.createWhiteKing());
+        setPosition('f', rank, Piece.createWhiteBishop());
+        setPosition('g', rank, Piece.createWhiteKnight());
+        setPosition('h', rank, Piece.createWhiteRook());
     }
     
     /**
      * Initializes the black-side rank where the king is in, i.e. rank #8.
      */
     private void initializeBlackKingRank() {
-        initializeKingRank(Piece.BLACK_COLOR);
-    }
-    
-    private void initializeKingRank(String color) {
-        int rank = (color == Piece.WHITE_COLOR) ? 1 : 8;
-        setPosition('a', rank, Piece.create(color, Piece.ROOK));
-        setPosition('b', rank, Piece.create(color, Piece.KNIGHT));
-        setPosition('c', rank, Piece.create(color, Piece.BISHOP));
-        setPosition('d', rank, Piece.create(color, Piece.QUEEN));
-        setPosition('e', rank, Piece.create(color, Piece.KING));
-        setPosition('f', rank, Piece.create(color, Piece.BISHOP));
-        setPosition('g', rank, Piece.create(color, Piece.KNIGHT));
-        setPosition('h', rank, Piece.create(color, Piece.ROOK));
+        int rank = 8;
+        setPosition('a', rank, Piece.createBlackRook());
+        setPosition('b', rank, Piece.createBlackKnight());
+        setPosition('c', rank, Piece.createBlackBishop());
+        setPosition('d', rank, Piece.createBlackQueen());
+        setPosition('e', rank, Piece.createBlackKing());
+        setPosition('f', rank, Piece.createBlackBishop());
+        setPosition('g', rank, Piece.createBlackKnight());
+        setPosition('h', rank, Piece.createBlackRook());
     }
     
     /**
      * Initialize the white-side rank where the pawn is in, i.e. rank #2.
      */
     private void initializeWhitePawnRank() {
-        initializePawnRank(Piece.WHITE_COLOR);
+        int row = 2;
+        for (int column = 1; column <= Board.COLUMN_COUNT; ++column)
+            setPosition(column, row, Piece.createWhitePawn());
     }
     
     /**
      * Initialize the black-side rank where the pawn is in, i.e. rank #7.
      */
     private void initializeBlackPawnRank() {
-        initializePawnRank(Piece.BLACK_COLOR);
-    }
-    
-    private void initializePawnRank(String color) {
-        int row = (color == Piece.WHITE_COLOR) ? 2 : 7;
-        for (int column = 1; column <= Board.COLUMN_COUNT; ++column) {
-            setPosition(column, row,
-                        Piece.create(color, Piece.PAWN));
-        }
+        int row = 7;
+        for (int column = 1; column <= Board.COLUMN_COUNT; ++column)
+            setPosition(column, row, Piece.createBlackPawn());
     }
     
     /**
@@ -133,7 +133,7 @@ public class Board {
         StringBuilder builder = new StringBuilder();
         for (Piece piece : rank) {
             if (piece != null)
-                builder.append(piece.getSymbol());
+                builder.append(piece.getRepresentation());
             else
                 builder.append('.');
         }

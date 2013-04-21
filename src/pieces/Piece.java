@@ -3,61 +3,101 @@ package pieces;
 import java.util.HashMap;
 
 public class Piece {
-    private enum Color { White, Black }
-    
-    public static final String WHITE_COLOR = "white";
-    public static final String BLACK_COLOR = "black";
-    public static final String KING =   "king";
-    public static final String QUEEN =  "queen";
-    public static final String ROOK =   "rook";
-    public static final String BISHOP = "bishop";
-    public static final String KNIGHT = "knight";
-    public static final String PAWN =   "pawn";   
-         
-    private static HashMap<String, String> pieceSymbolMap;
-    static {
-        pieceSymbolMap = new HashMap<String, String>();
-        pieceSymbolMap.put(WHITE_COLOR + KING,      "k");
-        pieceSymbolMap.put(WHITE_COLOR + QUEEN,     "q");
-        pieceSymbolMap.put(WHITE_COLOR + ROOK,      "r");
-        pieceSymbolMap.put(WHITE_COLOR + BISHOP,    "b");
-        pieceSymbolMap.put(WHITE_COLOR + KNIGHT,    "n");
-        pieceSymbolMap.put(WHITE_COLOR + PAWN,      "p");
-        pieceSymbolMap.put(BLACK_COLOR + KING,      "K");
-        pieceSymbolMap.put(BLACK_COLOR + QUEEN,     "Q");
-        pieceSymbolMap.put(BLACK_COLOR + ROOK,      "R");
-        pieceSymbolMap.put(BLACK_COLOR + BISHOP,    "B");
-        pieceSymbolMap.put(BLACK_COLOR + KNIGHT,    "N");
-        pieceSymbolMap.put(BLACK_COLOR + PAWN,      "P");
+    public enum Type {
+        NO_PIECE, PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING
     }
+    private enum Color { WHITE, BLACK }
     
+    
+    public static final char PAWN_REPRESENTATION = 'p';
+    public static final char ROOK_REPRESENTATION = 'r';
+    public static final char KNIGHT_REPRESENTATION = 'n';
+    public static final char BISHOP_REPRESENTATION = 'b';
+    public static final char QUEEN_REPRESENTATION = 'q';
+    public static final char KING_REPRESENTATION = 'k';
+    public static final char NO_PIECE_REPRESENTATION = '.';
+        
     private static int blackPieceCount = 0;
     private static int whitePieceCount = 0;
         
     private Color color;
-    private String name;
-    private String symbol;
+    private Type type;
+    private char representation;
     
     
     private Piece() {}
     
-    public static Piece create(String color, String name) {
+    public static Piece createWhitePawn() {
+        return create(Color.WHITE, Type.PAWN, PAWN_REPRESENTATION);
+    }
+    
+    public static Piece createWhiteRook() {
+        return create(Color.WHITE, Type.ROOK, ROOK_REPRESENTATION);
+    }
+    
+    public static Piece createWhiteKnight() {
+        return create(Color.WHITE, Type.KNIGHT, KNIGHT_REPRESENTATION);
+    }
+    
+    public static Piece createWhiteBishop() {
+        return create(Color.WHITE, Type.BISHOP, BISHOP_REPRESENTATION);
+    }
+    
+    public static Piece createWhiteQueen() {
+        return create(Color.WHITE, Type.QUEEN, QUEEN_REPRESENTATION);
+    }
+    
+    public static Piece createWhiteKing() {
+        return create(Color.WHITE, Type.KING, KING_REPRESENTATION);
+    }
+    
+    public static Piece createBlackPawn() {
+        return create(Color.BLACK, Type.PAWN, 
+                      Character.toUpperCase(PAWN_REPRESENTATION));
+    }
+    
+    public static Piece createBlackRook() {
+        return create(Color.BLACK, Type.ROOK, 
+                      Character.toUpperCase(ROOK_REPRESENTATION));
+    }
+    
+    public static Piece createBlackKnight() {
+        return create(Color.BLACK, Type.KNIGHT, 
+                      Character.toUpperCase(KNIGHT_REPRESENTATION));
+    }
+    
+    public static Piece createBlackBishop() {
+        return create(Color.BLACK, Type.BISHOP, 
+                      Character.toUpperCase(BISHOP_REPRESENTATION));
+    }
+    
+    public static Piece createBlackQueen() {
+        return create(Color.BLACK, Type.QUEEN, 
+                      Character.toUpperCase(QUEEN_REPRESENTATION));
+    }
+    
+    public static Piece createBlackKing() {
+        return create(Color.BLACK, Type.KING, 
+                      Character.toUpperCase(KING_REPRESENTATION));
+    }
+    
+    private static Piece create(Color color, Type type, char representation) {
         Piece piece = new Piece();
-        piece.color = color.equals(WHITE_COLOR) ? Color.White : Color.Black;
-        piece.name = name;
-        piece.symbol = chooseSymbol(color, name);
-        
-        if (color == BLACK_COLOR)
-            ++blackPieceCount;
-        
-        if (color == WHITE_COLOR)
-            ++whitePieceCount;
+        piece.color = color;
+        piece.type = type;
+        piece.representation = representation;
+                
+        if (color == Color.WHITE) ++whitePieceCount;
+        if (color == Color.BLACK) ++blackPieceCount;
         
         return piece;
     }
     
-    private static String chooseSymbol(String color, String name) {
-        return pieceSymbolMap.get(color + name);
+    public static Piece noPiece() {
+        Piece piece = new Piece();
+        piece.type = Type.NO_PIECE;
+        piece.representation = NO_PIECE_REPRESENTATION;
+        return piece;
     }
     
     public static int getBlackPieceCount() {
@@ -72,24 +112,20 @@ public class Piece {
         blackPieceCount = 0;
         whitePieceCount = 0;
     }
-    
-    public String getColor() {
-        return color == Color.White ? Piece.WHITE_COLOR : Piece.BLACK_COLOR;
+        
+    public Type getType() {
+        return type;
     }
     
-    public String getName() {
-        return name;
-    }
-    
-    public String getSymbol() {
-        return symbol;
+    public char getRepresentation() {
+        return representation;
     }
     
     public boolean isBlack() {
-        return color == Color.Black;
+        return color == Color.BLACK;
     }
     
     public boolean isWhite() {
-        return color == Color.White;
+        return color == Color.WHITE;
     }
 }
