@@ -6,7 +6,7 @@ public class Piece {
     public enum Type {
         NO_PIECE, PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING
     }
-    private enum Color { WHITE, BLACK }
+    public enum Color { WHITE, BLACK }
     
     
     public static final char PAWN_REPRESENTATION = 'p';
@@ -111,6 +111,10 @@ public class Piece {
     public static void resetCount() {
         blackPieceCount = 0;
         whitePieceCount = 0;
+    }
+    
+    public Color getColor() {
+        return color;
     }
         
     public Type getType() {

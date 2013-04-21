@@ -8,6 +8,7 @@ public class BoardTest extends TestCase {
     private Board board;
     
     public void setUp() {
+        Piece.resetCount();
         board = new Board();
     }
     
@@ -26,5 +27,18 @@ public class BoardTest extends TestCase {
                                       + "pppppppp" + newline
                                       + "rnbqkbnr" + newline;
         assertEquals(expectedBoardPrint, board.getPrint());
+    }
+    
+    public void testGetNumberOfPieces() {
+        int whitePawnNumber = 
+            board.getNumberOfPieces(Piece.Color.WHITE, Piece.Type.PAWN);
+        assertEquals(8, whitePawnNumber);
+        
+        int blackBishopNumber = 
+            board.getNumberOfPieces(Piece.Color.BLACK, Piece.Type.BISHOP);
+        assertEquals(2, blackBishopNumber);
+        
+        // More tests ...
+        
     }
 }

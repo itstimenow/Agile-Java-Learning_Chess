@@ -115,6 +115,20 @@ public class Board {
         return numberOfPieces;
     }
     
+    public int getNumberOfPieces(Piece.Color color, Piece.Type type) {
+        int numberOfPieces = 0;
+        
+        for (Piece[] pieces : positionState) {
+            for (Piece piece : pieces) {
+                if (piece == null) continue;
+                if (piece.getColor() == color && piece.getType() == type)
+                    ++numberOfPieces;
+            }
+        }
+        
+        return numberOfPieces;
+    }
+    
     public String getPrint() {
         StringBuilder builder = new StringBuilder();
         
