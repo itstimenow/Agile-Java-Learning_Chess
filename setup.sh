@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # ================================
-# Set up the shell environment for Agile Java Learning - SIS
+# Set up the shell environment for Agile Java Learning - Chess
 # ================================
 
 

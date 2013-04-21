@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <project name="AgileJava_Exercise" default="junitgui" basedir=".">
-    <property name="junitJar" value="/home/roger/lib/junit-4.11.jar" />
-    <property name="src.dir" value="${basedir}" />
-    <property name="build.dir" value="${basedir}\bin" />
+    <property name="junitJar" value="lib/junit-4.11.jar" />
+    <property name="src.dir" value="src" />
+    <property name="build.dir" value="bin" />
     
     <path id="classpath">
         <pathelement location="${junitJar}" />
