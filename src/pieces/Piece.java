@@ -3,6 +3,8 @@ package pieces;
 import java.util.HashMap;
 
 public class Piece {
+    private enum Color { White, Black }
+    
     public static final String WHITE_COLOR = "white";
     public static final String BLACK_COLOR = "black";
     public static final String KING =   "king";
@@ -32,7 +34,7 @@ public class Piece {
     private static int blackPieceCount = 0;
     private static int whitePieceCount = 0;
         
-    private String color;
+    private Color color;
     private String name;
     private String symbol;
     
@@ -41,7 +43,7 @@ public class Piece {
     
     public static Piece create(String color, String name) {
         Piece piece = new Piece();
-        piece.color = color;
+        piece.color = color.equals(WHITE_COLOR) ? Color.White : Color.Black;
         piece.name = name;
         piece.symbol = chooseSymbol(color, name);
         
@@ -72,7 +74,7 @@ public class Piece {
     }
     
     public String getColor() {
-        return color;
+        return color == Color.White ? Piece.WHITE_COLOR : Piece.BLACK_COLOR;
     }
     
     public String getName() {
@@ -84,10 +86,10 @@ public class Piece {
     }
     
     public boolean isBlack() {
-        return color == Piece.BLACK_COLOR;
+        return color == Color.Black;
     }
     
     public boolean isWhite() {
-        return color == Piece.WHITE_COLOR;
+        return color == Color.White;
     }
 }
