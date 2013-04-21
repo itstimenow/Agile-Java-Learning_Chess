@@ -15,12 +15,8 @@ public class Board {
     
     private Piece[][] positionState = new Piece[ROW_COUNT][COLUMN_COUNT];
     
-    
-    public Board() {
-        initialize();
-    }
-    
-    private void initialize() {
+        
+    public void initialize() {
         // Rank 1
         initializeWhiteKingRank();
         
@@ -164,5 +160,9 @@ public class Board {
             - Character.getNumericValue(firstColumnLetter);
         
         return positionState[rowIndex][columnIndex];
+    }
+    
+    public void placePiece(char file, int rank, Piece piece) {
+        setPosition(file, rank, piece);
     }
 }
