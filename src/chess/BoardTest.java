@@ -41,4 +41,14 @@ public class BoardTest extends TestCase {
         // More tests ...
         
     }
+    
+    public void testRetrievePiece() {
+        Piece piece = board.getPieceAt('a', 8);
+        assertTrue(piece.isBlack());
+        assertEquals(Piece.Type.ROOK, piece.getType());
+        
+        piece = board.getPieceAt('e', 1);
+        assertTrue(piece.isWhite());
+        assertEquals(Piece.Type.KING, piece.getType());
+    }
 }

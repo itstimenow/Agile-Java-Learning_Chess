@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import pieces.Piece;
 import util.StringUtil;
 
@@ -21,7 +22,7 @@ public class Board {
     
     private void initialize() {
         // Rank 1
-        initializeWhiteKingRank();        
+        initializeWhiteKingRank();
         
         // Rank 2
         initializeWhitePawnRank();
@@ -89,7 +90,8 @@ public class Board {
         int row = rank;
         
         char firstColumnLetter = 'a';
-        int column = (int)file - (int)firstColumnLetter + 1;
+        int column = Character.getNumericValue(file) 
+            - Character.getNumericValue(firstColumnLetter) + 1;
         
         setPosition(column, row, piece);
     }
@@ -99,7 +101,7 @@ public class Board {
      * @param row Number of 1 to 8
      */
     private void setPosition(int column, int row, Piece piece) {
-        positionState[row-1][column-1] = piece;
+        positionState[row - 1][column - 1] = piece;
     }
     
     public int getNumberOfPieces() {
@@ -152,5 +154,15 @@ public class Board {
                 builder.append('.');
         }
         return builder.toString();
+    }
+    
+    public Piece getPieceAt(char file, int rank) {
+        int rowIndex = rank - 1;
+        
+        char firstColumnLetter = 'a';
+        int columnIndex = Character.getNumericValue(file) 
+            - Character.getNumericValue(firstColumnLetter);
+        
+        return positionState[rowIndex][columnIndex];
     }
 }
