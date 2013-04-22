@@ -2,7 +2,7 @@ package pieces;
 
 import java.util.HashMap;
 
-public class Piece {
+public class Piece implements Comparable<Piece> {
     public enum Type {
         NO_PIECE, PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING
     }
@@ -25,6 +25,7 @@ public class Piece {
     private Color color;
     private Type type;
     private char representation;
+    private double strength;
     
     
     private Piece() {}
@@ -130,11 +131,24 @@ public class Piece {
         return representation;
     }
     
+    public double getStrength() {
+        return strength;
+    }
+    
+    public void setStrength(double strength) {
+        this.strength = strength;
+    }
+    
     public boolean isBlack() {
         return color == Color.BLACK;
     }
     
     public boolean isWhite() {
         return color == Color.WHITE;
+    }
+    
+    public int compareTo(Piece that) {
+        double result = this.getStrength() * 10 - that.getStrength() * 10;
+        return (int)result;
     }
 }

@@ -2,6 +2,8 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Collections;
 import pieces.Piece;
 import util.StringUtil;
 
@@ -14,6 +16,9 @@ public class Board {
     private static final int COLUMN_COUNT = 8;
     
     private Piece[][] positionState = new Piece[ROW_COUNT][COLUMN_COUNT];
+    
+    private List<Piece> blackSidePieces;
+    private List<Piece> whiteSidePieces;
     
     
     public static Board createEmptyBoard() {
@@ -139,6 +144,18 @@ public class Board {
         return numberOfPieces;
     }
     
+    public List<Piece> getBlackSidePieces() {
+        Collections.sort(blackSidePieces);
+        Collections.reverse(blackSidePieces);
+        return blackSidePieces;
+    }
+    
+    public List<Piece> getWhiteSidePieces() {
+        Collections.sort(whiteSidePieces);
+        Collections.reverse(whiteSidePieces);
+        return whiteSidePieces;
+    }
+    
     public String getPrint() {
         StringBuilder builder = new StringBuilder();
         
@@ -187,38 +204,68 @@ public class Board {
     }
     
     private double getStrengthOfSide(Piece.Color color) {
+        scanBoard();
+        
         double strength = 0.0;
-        int[] pawnOccurrenceTimeInEachFile = new int[Board.COLUMN_COUNT];
-        
-        for (Piece[] rank : positionState) {
-            int file = 0;
-            for (Piece piece : rank) {
-                ++file;
-                if (piece == null || piece.getColor() != color)
-                    continue;
-                
-                strength += getStrength(piece);
-                
-                if (piece.getType() == Piece.Type.PAWN)
-                    ++pawnOccurrenceTimeInEachFile[file - 1];
-            }
-        }
-        
-        for (int occurTime : pawnOccurrenceTimeInEachFile) {
-            if (occurTime > 1)
-                strength -= 0.5 * occurTime;
+        if (color == Piece.Color.BLACK) {
+            for (Piece piece : blackSidePieces)
+                strength += piece.getStrength();
+        } else if (color == Piece.Color.WHITE) {
+            for (Piece piece : whiteSidePieces)
+                strength += piece.getStrength();
         }
         
         return strength;
     }
     
-    private double getStrength(Piece piece) {
+    private void scanBoard() {
+        blackSidePieces = new ArrayList<Piece>();
+        whiteSidePieces = new ArrayList<Piece>();
+        for (Piece[] rank : positionState) {
+            for (int columnIndex = 0; columnIndex < Board.COLUMN_COUNT; 
+                 ++columnIndex) {
+                Piece piece = rank[columnIndex];
+                if (piece == null) continue;
+                if (piece.isBlack()) blackSidePieces.add(piece);
+                if (piece.isWhite()) whiteSidePieces.add(piece);
+                
+                piece.setStrength(calculateStrength(piece, columnIndex));
+            }
+        }
+    }
+    
+    
+    private double calculateStrength(Piece piece, int fileIndex) {
         if (piece.getType() == Piece.Type.QUEEN) return 9.0;
         if (piece.getType() == Piece.Type.ROOK) return 5.0;
         if (piece.getType() == Piece.Type.BISHOP) return 3.0;
         if (piece.getType() == Piece.Type.KNIGHT) return 2.5;
-        if (piece.getType() == Piece.Type.PAWN) return 1.0;
+        
+        if (piece.getType() == Piece.Type.PAWN)
+            return calculateStrengthForPawn(piece, fileIndex);
         
         return 0.0;
+    }
+    
+    private double calculateStrengthForPawn(Piece piece, int columnIndex) {
+        if (hasMultiplePawnsInColumn(columnIndex, piece.getColor()))
+            return 0.5;
+        else
+            return 1.0;
+    }
+    
+    private boolean hasMultiplePawnsInColumn(int columnIndex, 
+                                            Piece.Color color) {
+        int pawnCount = 0;
+        for (int rowIndex = 0; rowIndex < Board.ROW_COUNT; ++rowIndex) {
+            Piece piece = positionState[rowIndex][columnIndex];
+            if (piece == null) continue;
+            
+            if (piece.getType() == Piece.Type.PAWN 
+                    && piece.getColor() == color)
+                ++pawnCount;
+        }
+        
+        return pawnCount > 1;
     }
 }

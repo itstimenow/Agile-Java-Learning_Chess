@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.List;
 import junit.framework.TestCase;
 import util.StringUtil;
 import pieces.Piece;
@@ -107,5 +108,28 @@ public class BoardTest extends TestCase {
         
         // Verify that strength of black side keep unchanged
         assertEquals(20.0, board.getBlackSideStrength());
+        
+        
+        // Verify collection of pieces for each side
+        List<Piece> blackSidePieces = board.getBlackSidePieces();
+        assertEquals(7, blackSidePieces.size());
+        assertEquals(9.0, blackSidePieces.get(0).getStrength());
+        assertEquals(5.0, blackSidePieces.get(1).getStrength());
+        assertEquals(3.0, blackSidePieces.get(2).getStrength());
+        assertEquals(1.0, blackSidePieces.get(3).getStrength());
+        assertEquals(1.0, blackSidePieces.get(4).getStrength());
+        assertEquals(1.0, blackSidePieces.get(5).getStrength());
+        assertEquals(0.0, blackSidePieces.get(6).getStrength());
+        
+        List<Piece> whiteSidePieces = board.getWhiteSidePieces();
+        assertEquals(8, whiteSidePieces.size());
+        assertEquals(9.0, whiteSidePieces.get(0).getStrength());
+        assertEquals(5.0, whiteSidePieces.get(1).getStrength());
+        assertEquals(2.5, whiteSidePieces.get(2).getStrength());
+        assertEquals(1.0, whiteSidePieces.get(3).getStrength());
+        assertEquals(1.0, whiteSidePieces.get(4).getStrength());
+        assertEquals(0.5, whiteSidePieces.get(5).getStrength());
+        assertEquals(0.5, whiteSidePieces.get(6).getStrength());
+        assertEquals(0.0, whiteSidePieces.get(7).getStrength());
     }
 }
