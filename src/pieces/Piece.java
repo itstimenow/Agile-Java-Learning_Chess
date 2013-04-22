@@ -16,16 +16,22 @@ public class Piece implements Comparable<Piece> {
     public static final char QUEEN_REPRESENTATION = 'q';
     public static final char KING_REPRESENTATION = 'k';
     public static final char NO_PIECE_REPRESENTATION = '.';
-        
+    
     private static int blackPieceCount = 0;
     private static int whitePieceCount = 0;
     
     private static Piece noPiece;
-        
+    
+    
     private Color color;
     private Type type;
     private char representation;
     private double strength;
+    
+    private int positionRank;
+    private char positionFile;
+    private int positionRow;
+    private int positionColumn;
     
     
     private Piece() {}
@@ -137,6 +143,32 @@ public class Piece implements Comparable<Piece> {
     
     public void setStrength(double strength) {
         this.strength = strength;
+    }
+    
+    public int getPositionRank() {
+        return positionRank;
+    }
+    
+    public char getPositionFile() {
+        return positionFile;
+    }
+    
+    public int getPositionRow() {
+        return positionRow;
+    }
+    
+    public int getPositionColumn() {
+        return positionColumn;
+    }
+    
+    public void setPosition(char file, int rank) {
+        this.positionFile = file;
+        this.positionRank = rank;
+        
+        char firstFileLetter = 'a';
+        this.positionColumn = Character.getNumericValue(file) 
+                              - Character.getNumericValue(firstFileLetter);
+        this.positionRow = rank - 1;
     }
     
     public boolean isBlack() {

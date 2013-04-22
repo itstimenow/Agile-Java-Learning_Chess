@@ -17,8 +17,12 @@ public class Board {
     
     private Piece[][] positionState = new Piece[ROW_COUNT][COLUMN_COUNT];
     
-    private List<Piece> blackSidePieces;
-    private List<Piece> whiteSidePieces;
+    private List<Piece> blackSidePieces = new ArrayList<Piece>();
+    private List<Piece> whiteSidePieces = new ArrayList<Piece>();
+    
+    private List<Piece> allPawns = new ArrayList<Piece>();
+    private int[] blackPawnCountInColumn = new int[COLUMN_COUNT];
+    private int[] whitePawnCountInColumn = new int[COLUMN_COUNT];
     
     
     public static Board createEmptyBoard() {
@@ -52,14 +56,14 @@ public class Board {
      */
     private void initializeWhiteKingRank() {
         int rank = 1;
-        setPosition('a', rank, Piece.createWhiteRook());
-        setPosition('b', rank, Piece.createWhiteKnight());
-        setPosition('c', rank, Piece.createWhiteBishop());
-        setPosition('d', rank, Piece.createWhiteQueen());
-        setPosition('e', rank, Piece.createWhiteKing());
-        setPosition('f', rank, Piece.createWhiteBishop());
-        setPosition('g', rank, Piece.createWhiteKnight());
-        setPosition('h', rank, Piece.createWhiteRook());
+        placePiece('a', rank, Piece.createWhiteRook());
+        placePiece('b', rank, Piece.createWhiteKnight());
+        placePiece('c', rank, Piece.createWhiteBishop());
+        placePiece('d', rank, Piece.createWhiteQueen());
+        placePiece('e', rank, Piece.createWhiteKing());
+        placePiece('f', rank, Piece.createWhiteBishop());
+        placePiece('g', rank, Piece.createWhiteKnight());
+        placePiece('h', rank, Piece.createWhiteRook());
     }
     
     /**
@@ -67,55 +71,137 @@ public class Board {
      */
     private void initializeBlackKingRank() {
         int rank = 8;
-        setPosition('a', rank, Piece.createBlackRook());
-        setPosition('b', rank, Piece.createBlackKnight());
-        setPosition('c', rank, Piece.createBlackBishop());
-        setPosition('d', rank, Piece.createBlackQueen());
-        setPosition('e', rank, Piece.createBlackKing());
-        setPosition('f', rank, Piece.createBlackBishop());
-        setPosition('g', rank, Piece.createBlackKnight());
-        setPosition('h', rank, Piece.createBlackRook());
+        placePiece('a', rank, Piece.createBlackRook());
+        placePiece('b', rank, Piece.createBlackKnight());
+        placePiece('c', rank, Piece.createBlackBishop());
+        placePiece('d', rank, Piece.createBlackQueen());
+        placePiece('e', rank, Piece.createBlackKing());
+        placePiece('f', rank, Piece.createBlackBishop());
+        placePiece('g', rank, Piece.createBlackKnight());
+        placePiece('h', rank, Piece.createBlackRook());
     }
     
     /**
      * Initialize the white-side rank where the pawn is in, i.e. rank #2.
      */
     private void initializeWhitePawnRank() {
-        int row = 2;
-        for (int column = 1; column <= Board.COLUMN_COUNT; ++column)
-            setPosition(column, row, Piece.createWhitePawn());
+        int row = 1;
+        for (int column = 0; column < Board.COLUMN_COUNT; ++column)
+            placePiece(column, row, Piece.createWhitePawn());
     }
     
     /**
      * Initialize the black-side rank where the pawn is in, i.e. rank #7.
      */
     private void initializeBlackPawnRank() {
-        int row = 7;
-        for (int column = 1; column <= Board.COLUMN_COUNT; ++column)
-            setPosition(column, row, Piece.createBlackPawn());
+        int row = 6;
+        for (int column = 0; column < Board.COLUMN_COUNT; ++column)
+            placePiece(column, row, Piece.createBlackPawn());
     }
     
     /**
      * @param file Letter of a to h
      * @param rank Number of 1 to 8
      */
-    private void setPosition(char file, int rank, Piece piece) {
-        int row = rank;
+    public void placePiece(char file, int rank, Piece piece) {
+        int row = rank - 1;
         
         char firstColumnLetter = 'a';
         int column = Character.getNumericValue(file) 
-            - Character.getNumericValue(firstColumnLetter) + 1;
+            - Character.getNumericValue(firstColumnLetter);
         
-        setPosition(column, row, piece);
+        placePiece(column, row, piece);
+        
+        piece.setPosition(file, rank);
+        addToSidePieceCollection(piece);
+        addToPawnCollection(piece);
+        incrementPawnCount(piece, column);        
+        setStrength(piece);
     }
     
     /**
-     * @param column Number of 1 to 8
-     * @param row Number of 1 to 8
+     * @param column Number of 0 to 7, corresponding to file 'a' to 'h'
+     * @param row Number of 0 to 7, corresponding to rank 1 to 8
      */
-    private void setPosition(int column, int row, Piece piece) {
-        positionState[row - 1][column - 1] = piece;
+    private void placePiece(int column, int row, Piece piece) {
+        positionState[row][column] = piece;
     }
+    
+    private void addToSidePieceCollection(Piece piece) {
+        if (piece.isBlack())
+            blackSidePieces.add(piece);
+        if (piece.isWhite())
+            whiteSidePieces.add(piece);
+    }
+    
+    private void addToPawnCollection(Piece piece) {
+        if (piece.getType() == Piece.Type.PAWN)
+            allPawns.add(piece);
+    }
+    
+    private void incrementPawnCount(Piece piece, int column) {
+        if (isBlackPawn(piece)) {
+            ++blackPawnCountInColumn[column];
+        }
+        
+        if (isWhitePawn(piece)) {
+            ++whitePawnCountInColumn[column];
+        }
+    }
+    
+    private boolean isBlackPawn(Piece piece) {
+        return piece.isBlack() && piece.getType() == Piece.Type.PAWN;
+    }
+    
+    private boolean isWhitePawn(Piece piece) {
+        return piece.isWhite() && piece.getType() == Piece.Type.PAWN;
+    }
+    
+    private void setStrength(Piece piece) {
+        if (piece.getType() != Piece.Type.PAWN) {
+            double strength = calculateStrengthForNormalPiece(piece);
+            piece.setStrength(strength);
+        } else {
+            setStrengthForPawn(piece);
+        }
+    }
+    
+    private double calculateStrengthForNormalPiece(Piece piece) {
+        if (piece.getType() == Piece.Type.QUEEN) return 9.0;
+        if (piece.getType() == Piece.Type.ROOK) return 5.0;
+        if (piece.getType() == Piece.Type.BISHOP) return 3.0;
+        if (piece.getType() == Piece.Type.KNIGHT) return 2.5;
+        return 0.0;
+    }
+    
+    private void setStrengthForPawn(Piece pawn) {
+        double strength = calculateStrengthForPawn(pawn);
+        
+        for (Piece piece : allPawns) {
+            if (piece.getColor() == pawn.getColor()
+                    && piece.getPositionFile() == pawn.getPositionFile())
+                piece.setStrength(strength);
+        }
+    }
+    
+    private double calculateStrengthForPawn(Piece pawn) {
+        int pawnCount = getPawnCountInSameColumnAs(pawn);
+        
+        // if there are multiple pawns in the same column, strength is 0.5
+        if (pawnCount > 1)
+            return 0.5;
+        else
+            return 1.0;
+    }
+    
+    private int getPawnCountInSameColumnAs(Piece pawn) {
+        int column = pawn.getPositionColumn();
+        if (pawn.isBlack())
+            return blackPawnCountInColumn[column];
+        else
+            return whitePawnCountInColumn[column];
+    }
+    
     
     public int getNumberOfPieces() {
         int numberOfPieces = 0;
@@ -191,81 +277,18 @@ public class Board {
         return positionState[rowIndex][columnIndex];
     }
     
-    public void placePiece(char file, int rank, Piece piece) {
-        setPosition(file, rank, piece);
-    }
-    
     public double getBlackSideStrength() {
-        return getStrengthOfSide(Piece.Color.BLACK);
+        return getStrengthOfSide(blackSidePieces);
     }
     
     public double getWhiteSideStrength() {
-        return getStrengthOfSide(Piece.Color.WHITE);
+        return getStrengthOfSide(whiteSidePieces);
     }
     
-    private double getStrengthOfSide(Piece.Color color) {
-        scanBoard();
-        
+    private double getStrengthOfSide(List<Piece> pieces) {
         double strength = 0.0;
-        if (color == Piece.Color.BLACK) {
-            for (Piece piece : blackSidePieces)
-                strength += piece.getStrength();
-        } else if (color == Piece.Color.WHITE) {
-            for (Piece piece : whiteSidePieces)
-                strength += piece.getStrength();
-        }
-        
+        for (Piece piece : pieces)
+            strength += piece.getStrength();
         return strength;
-    }
-    
-    private void scanBoard() {
-        blackSidePieces = new ArrayList<Piece>();
-        whiteSidePieces = new ArrayList<Piece>();
-        for (Piece[] rank : positionState) {
-            for (int columnIndex = 0; columnIndex < Board.COLUMN_COUNT; 
-                 ++columnIndex) {
-                Piece piece = rank[columnIndex];
-                if (piece == null) continue;
-                if (piece.isBlack()) blackSidePieces.add(piece);
-                if (piece.isWhite()) whiteSidePieces.add(piece);
-                
-                piece.setStrength(calculateStrength(piece, columnIndex));
-            }
-        }
-    }
-    
-    
-    private double calculateStrength(Piece piece, int fileIndex) {
-        if (piece.getType() == Piece.Type.QUEEN) return 9.0;
-        if (piece.getType() == Piece.Type.ROOK) return 5.0;
-        if (piece.getType() == Piece.Type.BISHOP) return 3.0;
-        if (piece.getType() == Piece.Type.KNIGHT) return 2.5;
-        
-        if (piece.getType() == Piece.Type.PAWN)
-            return calculateStrengthForPawn(piece, fileIndex);
-        
-        return 0.0;
-    }
-    
-    private double calculateStrengthForPawn(Piece piece, int columnIndex) {
-        if (hasMultiplePawnsInColumn(columnIndex, piece.getColor()))
-            return 0.5;
-        else
-            return 1.0;
-    }
-    
-    private boolean hasMultiplePawnsInColumn(int columnIndex, 
-                                            Piece.Color color) {
-        int pawnCount = 0;
-        for (int rowIndex = 0; rowIndex < Board.ROW_COUNT; ++rowIndex) {
-            Piece piece = positionState[rowIndex][columnIndex];
-            if (piece == null) continue;
-            
-            if (piece.getType() == Piece.Type.PAWN 
-                    && piece.getColor() == color)
-                ++pawnCount;
-        }
-        
-        return pawnCount > 1;
     }
 }
