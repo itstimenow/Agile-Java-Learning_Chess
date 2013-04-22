@@ -15,8 +15,20 @@ public class Board {
     
     private Piece[][] positionState = new Piece[ROW_COUNT][COLUMN_COUNT];
     
+    
+    public static Board createEmptyBoard() {
+        return new Board();
+    }
+    
+    public static Board createInitializedBoard() {
+        Board board = new Board();
+        board.initialize();
+        return board;
+    }
+    
+    private Board() {}
         
-    public void initialize() {
+    private void initialize() {
         // Rank 1
         initializeWhiteKingRank();
         
@@ -164,5 +176,49 @@ public class Board {
     
     public void placePiece(char file, int rank, Piece piece) {
         setPosition(file, rank, piece);
+    }
+    
+    public double getBlackSideStrength() {
+        return getStrengthOfSide(Piece.Color.BLACK);
+    }
+    
+    public double getWhiteSideStrength() {
+        return getStrengthOfSide(Piece.Color.WHITE);
+    }
+    
+    private double getStrengthOfSide(Piece.Color color) {
+        double strength = 0.0;
+        int[] pawnOccurrenceTimeInEachFile = new int[Board.COLUMN_COUNT];
+        
+        for (Piece[] rank : positionState) {
+            int file = 0;
+            for (Piece piece : rank) {
+                ++file;
+                if (piece == null || piece.getColor() != color)
+                    continue;
+                
+                strength += getStrength(piece);
+                
+                if (piece.getType() == Piece.Type.PAWN)
+                    ++pawnOccurrenceTimeInEachFile[file - 1];
+            }
+        }
+        
+        for (int occurTime : pawnOccurrenceTimeInEachFile) {
+            if (occurTime > 1)
+                strength -= 0.5 * occurTime;
+        }
+        
+        return strength;
+    }
+    
+    private double getStrength(Piece piece) {
+        if (piece.getType() == Piece.Type.QUEEN) return 9.0;
+        if (piece.getType() == Piece.Type.ROOK) return 5.0;
+        if (piece.getType() == Piece.Type.BISHOP) return 3.0;
+        if (piece.getType() == Piece.Type.KNIGHT) return 2.5;
+        if (piece.getType() == Piece.Type.PAWN) return 1.0;
+        
+        return 0.0;
     }
 }

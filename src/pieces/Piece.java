@@ -19,6 +19,8 @@ public class Piece {
         
     private static int blackPieceCount = 0;
     private static int whitePieceCount = 0;
+    
+    private static Piece noPiece;
         
     private Color color;
     private Type type;
@@ -94,10 +96,13 @@ public class Piece {
     }
     
     public static Piece noPiece() {
-        Piece piece = new Piece();
-        piece.type = Type.NO_PIECE;
-        piece.representation = NO_PIECE_REPRESENTATION;
-        return piece;
+        if (noPiece != null)
+            return noPiece;
+        
+        noPiece = new Piece();
+        noPiece.type = Type.NO_PIECE;
+        noPiece.representation = NO_PIECE_REPRESENTATION;
+        return noPiece;
     }
     
     public static int getBlackPieceCount() {
