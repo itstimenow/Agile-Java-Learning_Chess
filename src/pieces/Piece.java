@@ -4,7 +4,17 @@ import java.util.HashMap;
 
 public class Piece implements Comparable<Piece> {
     public enum Type {
-        NO_PIECE, PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING
+        NO_PIECE(0.0),  PAWN(1.0),  ROOK(5.0),  KNIGHT(2.5),    BISHOP(3.0), 
+        QUEEN(9.0),     KING(0.0);
+        
+        private double points;
+        private Type(double points) {
+            this.points = points;
+        }
+        
+        public double getPoints() {
+            return points;
+        }
     }
     public enum Color { WHITE, BLACK }
     

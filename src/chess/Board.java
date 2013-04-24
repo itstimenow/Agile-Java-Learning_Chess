@@ -171,7 +171,7 @@ public class Board {
     }
     
     private double calculateStrengthForNonPawnPiece(Piece piece) {
-        return getBaseStrengthValues().get(piece.getType());
+        return piece.getType().getPoints();
     }
     
     private Map<Piece.Type, Double> getBaseStrengthValues() {
