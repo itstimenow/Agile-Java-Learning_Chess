@@ -17,17 +17,6 @@ public class Board {
     private static final int ROW_COUNT = 8;
     private static final int COLUMN_COUNT = 8;
     
-    private static Map<Piece.Type, Double> strengthValues;
-    static {
-        strengthValues = new EnumMap<Piece.Type, Double>(Piece.Type.class);
-        strengthValues.put(Piece.Type.QUEEN, 9.0);
-        strengthValues.put(Piece.Type.ROOK, 5.0);
-        strengthValues.put(Piece.Type.BISHOP, 3.0);
-        strengthValues.put(Piece.Type.KNIGHT, 2.5);
-        strengthValues.put(Piece.Type.PAWN, 1.0);
-        strengthValues.put(Piece.Type.KING, 0.0);
-    }
-    
     
     private Piece[][] positionState = new Piece[ROW_COUNT][COLUMN_COUNT];
     
@@ -38,6 +27,7 @@ public class Board {
     private int[] blackPawnCountInColumn = new int[COLUMN_COUNT];
     private int[] whitePawnCountInColumn = new int[COLUMN_COUNT];
     
+    private Map<Piece.Type, Double> baseStrengthValues;
     
     public static Board createEmptyBoard() {
         return new Board();
@@ -181,7 +171,23 @@ public class Board {
     }
     
     private double calculateStrengthForNonPawnPiece(Piece piece) {
-        return Board.strengthValues.get(piece.getType());
+        return getBaseStrengthValues().get(piece.getType());
+    }
+    
+    private Map<Piece.Type, Double> getBaseStrengthValues() {
+        if (baseStrengthValues == null)
+            loadBaseStrengthValues();
+        return baseStrengthValues;
+    }
+    
+    private void loadBaseStrengthValues() {
+        baseStrengthValues = new EnumMap<Piece.Type, Double>(Piece.Type.class);
+        baseStrengthValues.put(Piece.Type.QUEEN, 9.0);
+        baseStrengthValues.put(Piece.Type.ROOK, 5.0);
+        baseStrengthValues.put(Piece.Type.BISHOP, 3.0);
+        baseStrengthValues.put(Piece.Type.KNIGHT, 2.5);
+        baseStrengthValues.put(Piece.Type.PAWN, 1.0);
+        baseStrengthValues.put(Piece.Type.KING, 0.0);
     }
     
     private void setStrengthForPawn(Piece pawn) {
