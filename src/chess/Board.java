@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
+import java.util.Map;
+import java.util.EnumMap;
 import pieces.Piece;
 import util.StringUtil;
 
@@ -14,6 +16,18 @@ import util.StringUtil;
 public class Board {
     private static final int ROW_COUNT = 8;
     private static final int COLUMN_COUNT = 8;
+    
+    private static Map<Piece.Type, Double> strengthValues;
+    static {
+        strengthValues = new EnumMap<Piece.Type, Double>(Piece.Type.class);
+        strengthValues.put(Piece.Type.QUEEN, 9.0);
+        strengthValues.put(Piece.Type.ROOK, 5.0);
+        strengthValues.put(Piece.Type.BISHOP, 3.0);
+        strengthValues.put(Piece.Type.KNIGHT, 2.5);
+        strengthValues.put(Piece.Type.PAWN, 1.0);
+        strengthValues.put(Piece.Type.KING, 0.0);
+    }
+    
     
     private Piece[][] positionState = new Piece[ROW_COUNT][COLUMN_COUNT];
     
@@ -167,13 +181,7 @@ public class Board {
     }
     
     private double calculateStrengthForNonPawnPiece(Piece piece) {
-        switch (piece.getType()) {
-            case QUEEN:     return 9.0;
-            case ROOK:      return 5.0;
-            case BISHOP:    return 3.0;
-            case KNIGHT:    return 2.5;
-            default:        return 0.0;
-        }
+        return Board.strengthValues.get(piece.getType());
     }
     
     private void setStrengthForPawn(Piece pawn) {
