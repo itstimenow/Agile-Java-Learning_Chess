@@ -113,9 +113,9 @@ public class Board {
         placePiece(column, row, piece);
         
         piece.setPosition(file, rank);
-        addToSidePieceCollection(piece);
+        addToPieceCollection(piece);
         addToPawnCollection(piece);
-        incrementPawnCount(piece, column);        
+        incrementPawnCount(piece, column);
         setStrength(piece);
     }
     
@@ -127,7 +127,7 @@ public class Board {
         positionState[row][column] = piece;
     }
     
-    private void addToSidePieceCollection(Piece piece) {
+    private void addToPieceCollection(Piece piece) {
         if (piece.isBlack())
             blackSidePieces.add(piece);
         if (piece.isWhite())
@@ -159,19 +159,21 @@ public class Board {
     
     private void setStrength(Piece piece) {
         if (piece.getType() != Piece.Type.PAWN) {
-            double strength = calculateStrengthForNormalPiece(piece);
+            double strength = calculateStrengthForNonPawnPiece(piece);
             piece.setStrength(strength);
         } else {
             setStrengthForPawn(piece);
         }
     }
     
-    private double calculateStrengthForNormalPiece(Piece piece) {
-        if (piece.getType() == Piece.Type.QUEEN) return 9.0;
-        if (piece.getType() == Piece.Type.ROOK) return 5.0;
-        if (piece.getType() == Piece.Type.BISHOP) return 3.0;
-        if (piece.getType() == Piece.Type.KNIGHT) return 2.5;
-        return 0.0;
+    private double calculateStrengthForNonPawnPiece(Piece piece) {
+        switch (piece.getType()) {
+            case QUEEN:     return 9.0;
+            case ROOK:      return 5.0;
+            case BISHOP:    return 3.0;
+            case KNIGHT:    return 2.5;
+            default:        return 0.0;
+        }
     }
     
     private void setStrengthForPawn(Piece pawn) {
@@ -185,7 +187,11 @@ public class Board {
     }
     
     private double calculateStrengthForPawn(Piece pawn) {
-        int pawnCount = getPawnCountInSameColumnAs(pawn);
+        int pawnCount = 0;
+        if (pawn.isBlack())
+            pawnCount = getBlackPawnCountInSameColumnAs(pawn);
+        else
+            pawnCount = getWhitePawnCountInSameColumnAs(pawn);
         
         // if there are multiple pawns in the same column, strength is 0.5
         if (pawnCount > 1)
@@ -194,12 +200,14 @@ public class Board {
             return 1.0;
     }
     
-    private int getPawnCountInSameColumnAs(Piece pawn) {
+    private int getBlackPawnCountInSameColumnAs(Piece pawn) {
         int column = pawn.getPositionColumn();
-        if (pawn.isBlack())
-            return blackPawnCountInColumn[column];
-        else
-            return whitePawnCountInColumn[column];
+        return blackPawnCountInColumn[column];
+    }
+    
+    private int getWhitePawnCountInSameColumnAs(Piece pawn) {
+        int column = pawn.getPositionColumn();
+        return whitePawnCountInColumn[column];
     }
     
     
@@ -278,14 +286,14 @@ public class Board {
     }
     
     public double getBlackSideStrength() {
-        return getStrengthOfSide(blackSidePieces);
+        return getStrengthOf(blackSidePieces);
     }
     
     public double getWhiteSideStrength() {
-        return getStrengthOfSide(whiteSidePieces);
+        return getStrengthOf(whiteSidePieces);
     }
     
-    private double getStrengthOfSide(List<Piece> pieces) {
+    private double getStrengthOf(List<Piece> pieces) {
         double strength = 0.0;
         for (Piece piece : pieces)
             strength += piece.getStrength();
