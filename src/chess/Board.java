@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
-import java.util.Map;
-import java.util.EnumMap;
 import pieces.Piece;
 import util.StringUtil;
 
@@ -27,7 +25,6 @@ public class Board {
     private int[] blackPawnCountInColumn = new int[COLUMN_COUNT];
     private int[] whitePawnCountInColumn = new int[COLUMN_COUNT];
     
-    private Map<Piece.Type, Double> baseStrengthValues;
     
     public static Board createEmptyBoard() {
         return new Board();
@@ -172,22 +169,6 @@ public class Board {
     
     private double calculateStrengthForNonPawnPiece(Piece piece) {
         return piece.getType().getPoints();
-    }
-    
-    private Map<Piece.Type, Double> getBaseStrengthValues() {
-        if (baseStrengthValues == null)
-            loadBaseStrengthValues();
-        return baseStrengthValues;
-    }
-    
-    private void loadBaseStrengthValues() {
-        baseStrengthValues = new EnumMap<Piece.Type, Double>(Piece.Type.class);
-        baseStrengthValues.put(Piece.Type.QUEEN, 9.0);
-        baseStrengthValues.put(Piece.Type.ROOK, 5.0);
-        baseStrengthValues.put(Piece.Type.BISHOP, 3.0);
-        baseStrengthValues.put(Piece.Type.KNIGHT, 2.5);
-        baseStrengthValues.put(Piece.Type.PAWN, 1.0);
-        baseStrengthValues.put(Piece.Type.KING, 0.0);
     }
     
     private void setStrengthForPawn(Piece pawn) {
