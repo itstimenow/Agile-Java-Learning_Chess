@@ -6,33 +6,32 @@ import junit.framework.TestCase;
 public class PieceTest extends TestCase {
     public void testCreate() {
         verifyCreation(Piece.createWhitePawn(), Piece.createBlackPawn(),
-                       Piece.Type.PAWN, Piece.PAWN_REPRESENTATION);
+                       Piece.Type.PAWN, Piece.Type.PAWN.getCharacter());
         verifyCreation(Piece.createWhiteRook(), Piece.createBlackRook(),
-                       Piece.Type.ROOK, Piece.ROOK_REPRESENTATION);
+                       Piece.Type.ROOK, Piece.Type.ROOK.getCharacter());
         verifyCreation(Piece.createWhiteKnight(), Piece.createBlackKnight(),
-                       Piece.Type.KNIGHT, Piece.KNIGHT_REPRESENTATION);
+                       Piece.Type.KNIGHT, Piece.Type.KNIGHT.getCharacter());
         verifyCreation(Piece.createWhiteBishop(), Piece.createBlackBishop(),
-                       Piece.Type.BISHOP, Piece.BISHOP_REPRESENTATION);
+                       Piece.Type.BISHOP, Piece.Type.BISHOP.getCharacter());
         verifyCreation(Piece.createWhiteQueen(), Piece.createBlackQueen(),
-                       Piece.Type.QUEEN, Piece.QUEEN_REPRESENTATION);
+                       Piece.Type.QUEEN, Piece.Type.QUEEN.getCharacter());
         verifyCreation(Piece.createWhiteKing(), Piece.createBlackKing(),
-                       Piece.Type.KING, Piece.KING_REPRESENTATION);
+                       Piece.Type.KING, Piece.Type.KING.getCharacter());
         
         Piece blank = Piece.noPiece();
-        assertEquals('.', blank.getRepresentation());
+        assertEquals(Piece.Type.NO_PIECE.getCharacter(), blank.getRepresentation());
         assertEquals(Piece.Type.NO_PIECE, blank.getType());
     }
     
     private void verifyCreation(Piece whitePiece, Piece blackPiece,
-                                Piece.Type type, char representation) {
+                                Piece.Type expectedType, char expectedRepresentation) {
         assertTrue(whitePiece.isWhite());
-        assertEquals(type, whitePiece.getType());
-        assertEquals(representation, whitePiece.getRepresentation());
+        assertEquals(expectedType, whitePiece.getType());
+        assertEquals(expectedRepresentation, whitePiece.getRepresentation());
         
         assertTrue(blackPiece.isBlack());
-        assertEquals(type, blackPiece.getType());
-        assertEquals(Character.toUpperCase(representation),
-                     blackPiece.getRepresentation());
+        assertEquals(expectedType, blackPiece.getType());
+        assertEquals(Character.toUpperCase(expectedRepresentation), blackPiece.getRepresentation());
     }
     
     public void testCount() {
@@ -53,5 +52,57 @@ public class PieceTest extends TestCase {
         Piece.createBlackPawn();
         assertEquals(2, Piece.getBlackPieceCount());
         assertEquals(3, Piece.getWhitePieceCount());
+    }
+    
+    public void testPieceType() {
+        assertEquals(0.0, Piece.Type.NO_PIECE.getPoints());
+        assertEquals('.', Piece.Type.NO_PIECE.getCharacter());
+        
+        assertEquals(1.0, Piece.Type.PAWN.getPoints());
+        assertEquals('p', Piece.Type.PAWN.getCharacter());
+        
+        assertEquals(5.0, Piece.Type.ROOK.getPoints());
+        assertEquals('r', Piece.Type.ROOK.getCharacter());
+        
+        assertEquals(2.5, Piece.Type.KNIGHT.getPoints());
+        assertEquals('n', Piece.Type.KNIGHT.getCharacter());
+        
+        assertEquals(3.0, Piece.Type.BISHOP.getPoints());
+        assertEquals('b', Piece.Type.BISHOP.getCharacter());
+        
+        assertEquals(9.0, Piece.Type.QUEEN.getPoints());
+        assertEquals('q', Piece.Type.QUEEN.getCharacter());
+        
+        assertEquals(0.0, Piece.Type.KING.getPoints());
+        assertEquals('k', Piece.Type.KING.getCharacter());
+    }
+    
+    public void testPiecePosition() {
+        Piece piece = Piece.createBlackPawn();
+        piece.setPosition('d', 7);
+        
+        assertEquals('d', piece.getPositionFile());
+        assertEquals(7, piece.getPositionRank());
+        
+        assertEquals(3, piece.getPositionColumn());
+        assertEquals(6, piece.getPositionRow());
+    }
+    
+    public void testMoveKing() {
+        Piece king = Piece.createWhiteKing();
+        king.setPosition('c', 2);
+        king.moveLeft();
+        verifyPosition(king, 'b', 2);
+        king.moveUp();
+        verifyPosition(king, 'b', 3);
+        king.moveRight();
+        verifyPosition(king, 'c', 3);
+        king.moveDown();
+        verifyPosition(king, 'c', 2);
+    }
+    
+    private void verifyPosition(Piece piece, char expectedFile, int expectedRank) {
+        assertEquals(expectedFile, piece.getPositionFile());
+        assertEquals(expectedRank, piece.getPositionRank());
     }
 }

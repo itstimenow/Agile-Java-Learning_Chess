@@ -196,4 +196,24 @@ public class Piece implements Comparable<Piece> {
         double result = this.getStrength() * 10 - that.getStrength() * 10;
         return (int)result;
     }
+    
+    public void moveLeft() {
+        positionFile = (char)(positionFile - 1);
+        positionColumn--;
+    }
+    
+    public void moveRight() {
+        positionFile = (char)(positionFile + 1);
+        positionColumn++;
+    }
+    
+    public void moveUp() {
+        positionRank++;
+        positionRow++;
+    }
+    
+    public void moveDown() {
+        positionRank--;
+        positionRow--;
+    }
 }

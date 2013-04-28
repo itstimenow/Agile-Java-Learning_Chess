@@ -294,4 +294,40 @@ public class Board {
             strength += piece.getStrength();
         return strength;
     }
+    
+    public void moveKingLeft(Piece king) {
+        int originalRow = king.getPositionRow();
+        int originalColumn = king.getPositionColumn();
+        
+        king.moveLeft();
+        positionState[originalRow][originalColumn] = null;
+        positionState[originalRow][originalColumn - 1] = king;
+    }
+    
+    public void moveKingRight(Piece king) {
+        int originalRow = king.getPositionRow();
+        int originalColumn = king.getPositionColumn();
+        
+        king.moveRight();
+        positionState[originalRow][originalColumn] = null;
+        positionState[originalRow][originalColumn + 1] = king;
+    }
+    
+    public void moveKingUp(Piece king) {
+        int originalRow = king.getPositionRow();
+        int originalColumn = king.getPositionColumn();
+        
+        king.moveUp();
+        positionState[originalRow][originalColumn] = null;
+        positionState[originalRow + 1][originalColumn] = king;
+    }
+    
+    public void moveKingDown(Piece king) {
+        int originalRow = king.getPositionRow();
+        int originalColumn = king.getPositionColumn();
+        
+        king.moveDown();
+        positionState[originalRow][originalColumn] = null;
+        positionState[originalRow - 1][originalColumn] = king;
+    }
 }

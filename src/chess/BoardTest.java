@@ -132,4 +132,26 @@ public class BoardTest extends TestCase {
         assertEquals(0.5, whiteSidePieces.get(6).getStrength());
         assertEquals(0.0, whiteSidePieces.get(7).getStrength());
     }
+    
+    public void testMoveKing() {
+        board = Board.createEmptyBoard();
+        Piece king = Piece.createWhiteKing();
+        board.placePiece('c', 2, king);
+        
+        board.moveKingLeft(king);
+        assertEquals(null, board.getPieceAt('c', 2));
+        assertEquals(king, board.getPieceAt('b', 2));
+        
+        board.moveKingUp(king);
+        assertEquals(null, board.getPieceAt('b', 2));
+        assertEquals(king, board.getPieceAt('b', 3));
+        
+        board.moveKingRight(king);
+        assertEquals(null, board.getPieceAt('b', 3));
+        assertEquals(king, board.getPieceAt('c', 3));
+        
+        board.moveKingDown(king);
+        assertEquals(null, board.getPieceAt('c', 3));
+        assertEquals(king, board.getPieceAt('c', 2));
+    }
 }
