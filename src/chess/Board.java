@@ -12,8 +12,12 @@ import util.StringUtil;
  * Represents a board in the chess.
  */
 public class Board {
-    private static final int ROW_COUNT = 8;
-    private static final int COLUMN_COUNT = 8;
+    
+    public static final int ROW_COUNT = 8;
+    public static final int COLUMN_COUNT = 8;
+    
+    public static final char[] FILES = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+    public static final int[] RANKS = { 1, 2, 3, 4, 5, 6, 7, 8 };
     
     
     private Piece[][] positionState = new Piece[ROW_COUNT][COLUMN_COUNT];
@@ -27,91 +31,34 @@ public class Board {
     
     
     public static Board createEmptyBoard() {
-        return new Board();
-    }
-    
-    public static Board createInitializedBoard() {
         Board board = new Board();
-        board.initialize();
+        for (char file : FILES)
+            for (int rank : RANKS)
+                board.put(Piece.BLANK, file, rank);
+        
         return board;
     }
     
     private Board() {}
-        
-    private void initialize() {
-        // Rank 1
-        initializeWhiteKingRank();
-        
-        // Rank 2
-        initializeWhitePawnRank();
-        
-        // Rank 7
-        initializeBlackPawnRank();
-        
-        // Rank 8
-        initializeBlackKingRank();
-    }
     
-    /**
-     * Initializes the white-side rank where the king is in, i.e. rank #1.
-     */
-    private void initializeWhiteKingRank() {
-        int rank = 1;
-        placePiece('a', rank, Piece.createWhiteRook());
-        placePiece('b', rank, Piece.createWhiteKnight());
-        placePiece('c', rank, Piece.createWhiteBishop());
-        placePiece('d', rank, Piece.createWhiteQueen());
-        placePiece('e', rank, Piece.createWhiteKing());
-        placePiece('f', rank, Piece.createWhiteBishop());
-        placePiece('g', rank, Piece.createWhiteKnight());
-        placePiece('h', rank, Piece.createWhiteRook());
-    }
-    
-    /**
-     * Initializes the black-side rank where the king is in, i.e. rank #8.
-     */
-    private void initializeBlackKingRank() {
-        int rank = 8;
-        placePiece('a', rank, Piece.createBlackRook());
-        placePiece('b', rank, Piece.createBlackKnight());
-        placePiece('c', rank, Piece.createBlackBishop());
-        placePiece('d', rank, Piece.createBlackQueen());
-        placePiece('e', rank, Piece.createBlackKing());
-        placePiece('f', rank, Piece.createBlackBishop());
-        placePiece('g', rank, Piece.createBlackKnight());
-        placePiece('h', rank, Piece.createBlackRook());
-    }
-    
-    /**
-     * Initialize the white-side rank where the pawn is in, i.e. rank #2.
-     */
-    private void initializeWhitePawnRank() {
-        int row = 1;
-        for (int column = 0; column < Board.COLUMN_COUNT; ++column)
-            placePiece(column, row, Piece.createWhitePawn());
-    }
-    
-    /**
-     * Initialize the black-side rank where the pawn is in, i.e. rank #7.
-     */
-    private void initializeBlackPawnRank() {
-        int row = 6;
-        for (int column = 0; column < Board.COLUMN_COUNT; ++column)
-            placePiece(column, row, Piece.createBlackPawn());
+    public void put(Piece piece, Position position) {
+        char file = position.getFile();
+        int rank = position.getRank();
+        put(piece, file, rank);
     }
     
     /**
      * @param file Letter of a to h
      * @param rank Number of 1 to 8
      */
-    public void placePiece(char file, int rank, Piece piece) {
+    public void put(Piece piece, char file, int rank) {
         int row = rank - 1;
         
         char firstColumnLetter = 'a';
         int column = Character.getNumericValue(file) 
             - Character.getNumericValue(firstColumnLetter);
         
-        placePiece(column, row, piece);
+        put(piece, column, row);
         
         piece.setPosition(file, rank);
         addToPieceCollection(piece);
@@ -124,7 +71,7 @@ public class Board {
      * @param column Number of 0 to 7, corresponding to file 'a' to 'h'
      * @param row Number of 0 to 7, corresponding to rank 1 to 8
      */
-    private void placePiece(int column, int row, Piece piece) {
+    private void put(Piece piece, int column, int row) {
         positionState[row][column] = piece;
     }
     
@@ -211,7 +158,7 @@ public class Board {
                 
         for (Piece[] pieces : positionState) {
             for (Piece piece : pieces) {
-                if (piece != null)
+                if (piece != Piece.BLANK)
                     ++numberOfPieces;
             }
         }

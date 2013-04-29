@@ -1,6 +1,7 @@
 package pieces;
 
 import java.util.HashMap;
+import chess.Position;
 
 public class Piece implements Comparable<Piece> {
     public enum Type {
@@ -31,10 +32,15 @@ public class Piece implements Comparable<Piece> {
     
     public enum Color { WHITE, BLACK }
     
+    public static final Piece BLANK;
+    static {
+        BLANK = new Piece();
+        BLANK.type = Type.NO_PIECE;
+        BLANK.representation = Type.NO_PIECE.getCharacter();
+    }
+    
     private static int blackPieceCount = 0;
     private static int whitePieceCount = 0;
-    
-    private static Piece noPiece;
     
     
     private Color color;
@@ -42,10 +48,7 @@ public class Piece implements Comparable<Piece> {
     private char representation;
     private double strength;
     
-    private int positionRank;
-    private char positionFile;
-    private int positionRow;
-    private int positionColumn;
+    private Position position;
     
     
     private Piece() {}
@@ -115,16 +118,6 @@ public class Piece implements Comparable<Piece> {
         return piece;
     }
     
-    public static Piece noPiece() {
-        if (noPiece != null)
-            return noPiece;
-        
-        noPiece = new Piece();
-        noPiece.type = Type.NO_PIECE;
-        noPiece.representation = Type.NO_PIECE.getCharacter();
-        return noPiece;
-    }
-    
     public static int getBlackPieceCount() {
         return blackPieceCount;
     }
@@ -158,30 +151,32 @@ public class Piece implements Comparable<Piece> {
         this.strength = strength;
     }
     
+    public Position getPosition() {
+        return position;
+    }
+    
     public int getPositionRank() {
-        return positionRank;
+        return position.getRank();
     }
     
     public char getPositionFile() {
-        return positionFile;
+        return position.getFile();
     }
     
     public int getPositionRow() {
-        return positionRow;
+        return position.getRow();
     }
     
     public int getPositionColumn() {
-        return positionColumn;
+        return position.getColumn();
     }
     
     public void setPosition(char file, int rank) {
-        this.positionFile = file;
-        this.positionRank = rank;
-        
-        char firstFileLetter = 'a';
-        this.positionColumn = Character.getNumericValue(file) 
-                              - Character.getNumericValue(firstFileLetter);
-        this.positionRow = rank - 1;
+        position = new Position(file, rank);
+    }
+    
+    public void setPosition(Position position) {
+        this.position = position;
     }
     
     public boolean isBlack() {
@@ -198,22 +193,18 @@ public class Piece implements Comparable<Piece> {
     }
     
     public void moveLeft() {
-        positionFile = (char)(positionFile - 1);
-        positionColumn--;
+        position = position.left();
     }
     
     public void moveRight() {
-        positionFile = (char)(positionFile + 1);
-        positionColumn++;
+        position = position.right();
     }
     
     public void moveUp() {
-        positionRank++;
-        positionRow++;
+        position = position.up();
     }
     
     public void moveDown() {
-        positionRank--;
-        positionRow--;
+        position = position.down();
     }
 }

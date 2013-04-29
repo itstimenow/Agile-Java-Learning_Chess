@@ -2,6 +2,7 @@ package pieces;
 
 import java.util.HashMap;
 import junit.framework.TestCase;
+import chess.Position;
 
 public class PieceTest extends TestCase {
     public void testCreate() {
@@ -18,7 +19,7 @@ public class PieceTest extends TestCase {
         verifyCreation(Piece.createWhiteKing(), Piece.createBlackKing(),
                        Piece.Type.KING, Piece.Type.KING.getCharacter());
         
-        Piece blank = Piece.noPiece();
+        Piece blank = Piece.BLANK;
         assertEquals(Piece.Type.NO_PIECE.getCharacter(), blank.getRepresentation());
         assertEquals(Piece.Type.NO_PIECE, blank.getType());
     }
@@ -86,6 +87,12 @@ public class PieceTest extends TestCase {
         
         assertEquals(3, piece.getPositionColumn());
         assertEquals(6, piece.getPositionRow());
+        
+        Position position = new Position('d', 7);
+        piece.setPosition(position);
+        Position piecePosition = piece.getPosition();
+        assertEquals('d', piecePosition.getFile());
+        assertEquals(7, piecePosition.getRank());
     }
     
     public void testMoveKing() {

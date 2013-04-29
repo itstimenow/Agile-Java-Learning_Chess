@@ -9,58 +9,57 @@ public class BoardTest extends TestCase {
     private Board board;
     
     public void setUp() {
-        board = Board.createInitializedBoard();
+        board = Board.createEmptyBoard();
     }
     
     public void testCreate() {
         board = Board.createEmptyBoard();
         assertEquals(0, board.getNumberOfPieces());
         
-        Piece.resetCount();
-        board = Board.createInitializedBoard();
-        assertEquals(32, board.getNumberOfPieces());
-        assertEquals(16, Piece.getBlackPieceCount());
-        assertEquals(16, Piece.getWhitePieceCount());
-        
-        String newline = StringUtil.NEWLINE;
-        String expectedBoardPrint = "RNBQKBNR" + newline
-                                      + "PPPPPPPP" + newline
-                                      + "........" + newline
-                                      + "........" + newline
-                                      + "........" + newline
-                                      + "........" + newline
-                                      + "pppppppp" + newline
-                                      + "rnbqkbnr" + newline;
-        assertEquals(expectedBoardPrint, board.getPrint());
+        // Verify that each square is blank
+        for (char file : Board.FILES)
+            for (int rank : Board.RANKS)
+                assertEquals(Piece.BLANK, board.getPieceAt(file, rank));
     }
     
-    public void testGetNumberOfPieces() {        
+    public void testGetNumberOfPieces() {
+        board.put(Piece.createWhitePawn(), 'c', 2);
+        board.put(Piece.createWhitePawn(), 'c', 3);
+        board.put(Piece.createWhitePawn(), 'c', 4);
+        
         int whitePawnNumber = 
             board.getNumberOfPieces(Piece.Color.WHITE, Piece.Type.PAWN);
-        assertEquals(8, whitePawnNumber);
+        assertEquals(3, whitePawnNumber);
+        
+        
+        board.put(Piece.createBlackBishop(), 'a', 8);
+        board.put(Piece.createBlackBishop(), 'b', 7);
         
         int blackBishopNumber = 
             board.getNumberOfPieces(Piece.Color.BLACK, Piece.Type.BISHOP);
         assertEquals(2, blackBishopNumber);
-        
-        // More tests ...
-        
     }
     
-    public void testRetrievePiece() {        
-        Piece piece = board.getPieceAt('a', 8);
-        verifyPiece(piece, Piece.Color.BLACK, Piece.Type.ROOK);
+    public void testRetrievePiece() {
+        char file = 'g';
+        int rank = 5;
+        board.put(Piece.createBlackRook(), file, rank);
+        Piece blackRook = board.getPieceAt(file, rank);
+        verifyPiece(blackRook, Piece.Color.BLACK, Piece.Type.ROOK);
         
-        piece = board.getPieceAt('e', 1);
-        verifyPiece(piece, Piece.Color.WHITE, Piece.Type.KING);
+        file = 'e';
+        rank = 8;
+        board.put(Piece.createWhiteQueen(), file, rank);
+        Piece whiteQueen = board.getPieceAt(file, rank);
+        verifyPiece(whiteQueen, Piece.Color.WHITE, Piece.Type.QUEEN);
     }
     
-    public void testPlacePiece() {
+    public void testPutPiece01() {
         board = Board.createEmptyBoard();
         
-        board.placePiece('b', 6, Piece.createBlackKing());
-        board.placePiece('b', 5, Piece.createBlackRook());
-        board.placePiece('c', 4, Piece.createWhiteKing());
+        board.put(Piece.createBlackKing(),  'b', 6);
+        board.put(Piece.createBlackRook(),  'b', 5);
+        board.put(Piece.createWhiteKing(),  'c', 4);
         
         Piece piece = board.getPieceAt('b', 6);
         verifyPiece(piece, Piece.Color.BLACK, Piece.Type.KING);
@@ -72,6 +71,22 @@ public class BoardTest extends TestCase {
         verifyPiece(piece, Piece.Color.WHITE, Piece.Type.KING);
     }
     
+    public void testPutPiece02() {
+        board = Board.createEmptyBoard();
+        
+        Position position = new Position('b', 6);
+        board.put(Piece.createBlackKing(), position);
+        
+        position = new Position('c', 4);
+        board.put(Piece.createWhiteBishop(), position);
+        
+        Piece piece = board.getPieceAt('b', 6);
+        verifyPiece(piece, Piece.Color.BLACK, Piece.Type.KING);
+        
+        piece = board.getPieceAt('c', 4);
+        verifyPiece(piece, Piece.Color.WHITE, Piece.Type.BISHOP);
+    }
+    
     private void verifyPiece(Piece piece, Piece.Color color, Piece.Type type) {
         assertEquals(color, piece.getColor());
         assertEquals(type, piece.getType());
@@ -81,29 +96,29 @@ public class BoardTest extends TestCase {
         board = board.createEmptyBoard();
         
         // Black side
-        board.placePiece('b', 6, Piece.createBlackPawn());
+        board.put(Piece.createBlackPawn(),  'b', 6);
         assertEquals(1.0, board.getBlackSideStrength());        
-        board.placePiece('e', 6, Piece.createBlackQueen());
+        board.put(Piece.createBlackQueen(), 'e', 6);
         assertEquals(10.0, board.getBlackSideStrength());
         
-        board.placePiece('a', 7, Piece.createBlackPawn());
-        board.placePiece('c', 7, Piece.createBlackPawn());
-        board.placePiece('d', 7, Piece.createBlackBishop());
-        board.placePiece('b', 8, Piece.createBlackKing());
-        board.placePiece('c', 8, Piece.createBlackRook());
+        board.put(Piece.createBlackPawn(),   'a', 7);
+        board.put(Piece.createBlackPawn(),   'c', 7);
+        board.put(Piece.createBlackBishop(), 'd', 7);
+        board.put(Piece.createBlackKing(),   'b', 8);
+        board.put(Piece.createBlackRook(),   'c', 8);
         assertEquals(20.0, board.getBlackSideStrength());
         
         // White side
-        board.placePiece('f', 4, Piece.createWhiteKnight());
-        board.placePiece('g', 4, Piece.createWhiteQueen());
-        board.placePiece('f', 3, Piece.createWhitePawn());
-        board.placePiece('h', 3, Piece.createWhitePawn());
+        board.put(Piece.createWhiteKnight(), 'f', 4);
+        board.put(Piece.createWhiteQueen(),  'g', 4);
+        board.put(Piece.createWhitePawn(),   'f', 3);
+        board.put(Piece.createWhitePawn(),   'h', 3);
         assertEquals(13.5, board.getWhiteSideStrength());
         
-        board.placePiece('f', 2, Piece.createWhitePawn());
-        board.placePiece('g', 2, Piece.createWhitePawn());
-        board.placePiece('e', 1, Piece.createWhiteRook());
-        board.placePiece('f', 1, Piece.createWhiteKing());
+        board.put(Piece.createWhitePawn(), 'f', 2);
+        board.put(Piece.createWhitePawn(), 'g', 2);
+        board.put(Piece.createWhiteRook(), 'e', 1);
+        board.put(Piece.createWhiteKing(), 'f', 1);
         assertEquals(19.5, board.getWhiteSideStrength());
         
         // Verify that strength of black side keep unchanged
@@ -136,7 +151,7 @@ public class BoardTest extends TestCase {
     public void testMoveKing() {
         board = Board.createEmptyBoard();
         Piece king = Piece.createWhiteKing();
-        board.placePiece('c', 2, king);
+        board.put(king, 'c', 2);
         
         board.moveKingLeft(king);
         assertEquals(null, board.getPieceAt('c', 2));
