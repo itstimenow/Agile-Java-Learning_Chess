@@ -32,22 +32,38 @@ public class Position {
     }
     
     public Position left() {
-        char leftFile = (char)(this.file - 1);
+        return left(1);
+    }
+    
+    public Position left(int offset) {
+        char leftFile = (char)(this.file - offset);
         return new Position(leftFile, rank);
     }
     
     public Position right() {
-        char rightFile = (char)(this.file + 1);
+        return right(1);
+    }
+    
+    public Position right(int offset) {
+        char rightFile = (char)(this.file + offset);
         return new Position(rightFile, rank);
     }
     
     public Position up() {
-        int upRank = rank + 1;
+        return up(1);
+    }
+    
+    public Position up(int offset) {
+        int upRank = rank + offset;
         return new Position(file, upRank);
     }
     
     public Position down() {
-        int downRank = rank - 1;
+        return down(1);
+    }
+    
+    public Position down(int offset) {
+        int downRank = rank - offset;
         return new Position(file, downRank);
     }
 }

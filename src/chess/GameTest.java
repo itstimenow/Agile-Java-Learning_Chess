@@ -60,6 +60,27 @@ public class GameTest extends TestCase {
         assertEquals(king, board.getPieceAt('c', 2));
     }
     
+    public void testMoveQueen() {
+        Piece queen = Piece.createWhiteQueen();
+        board.put(queen, 'c', 2);
+        
+        game.moveLeft(queen, 1);
+        assertEquals(Piece.BLANK, board.getPieceAt('c', 2));
+        assertEquals(queen, board.getPieceAt('b', 2));
+        
+        game.moveUp(queen, 5);
+        assertEquals(Piece.BLANK, board.getPieceAt('b', 2));
+        assertEquals(queen, board.getPieceAt('b', 7));
+        
+        game.moveRight(queen, 6);
+        assertEquals(Piece.BLANK, board.getPieceAt('b', 7));
+        assertEquals(queen, board.getPieceAt('h', 7));
+        
+        game.moveDown(queen, 3);
+        assertEquals(Piece.BLANK, board.getPieceAt('h', 7));
+        assertEquals(queen, board.getPieceAt('h', 4));
+    }
+    
     /**
      * Some basic tests on strength
      */

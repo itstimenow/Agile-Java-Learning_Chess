@@ -90,31 +90,63 @@ public class Game {
     }
     
     public void moveLeft(Piece piece) {
+        moveLeft(piece, 1);
+    }
+    
+    /**
+     * Moves a piece in the left horizontal direction.
+     * @param squares The number of squares to move over
+     */
+    public void moveLeft(Piece piece, int squares) {
         Position originalPosition = piece.getPosition();
         
         board.put(Piece.BLANK, originalPosition);
-        board.put(piece, originalPosition.left());
+        board.put(piece, originalPosition.left(squares));
     }
     
     public void moveRight(Piece piece) {
+        moveRight(piece, 1);
+    }
+    
+    /**
+     * Moves a piece in the right horizontal direction.
+     * @param squares The number of squares to move over
+     */
+    public void moveRight(Piece piece, int squares) {
         Position originalPosition = piece.getPosition();
         
         board.put(Piece.BLANK, originalPosition);
-        board.put(piece, originalPosition.right()); 
+        board.put(piece, originalPosition.right(squares)); 
     }
     
     public void moveUp(Piece piece) {
+        moveUp(piece, 1);
+    }
+    
+    /**
+     * Moves a piece in the up vertical direction.
+     * @param squares The number of squares to move over
+     */
+    public void moveUp(Piece piece, int squares) {
         Position originalPosition = piece.getPosition();
         
         board.put(Piece.BLANK, originalPosition);
-        board.put(piece, originalPosition.up());
+        board.put(piece, originalPosition.up(squares));
     }
     
     public void moveDown(Piece piece) {
+        moveDown(piece, 1);
+    }
+    
+    /**
+     * Moves a piece in the down vertical direction.
+     * @param squares The number of squares to move over
+     */
+    public void moveDown(Piece piece, int squares) {
         Position originalPosition = piece.getPosition();
         
         board.put(Piece.BLANK, originalPosition);
-        board.put(piece, originalPosition.down());
+        board.put(piece, originalPosition.down(squares));
     }
     
     public double getBlackSideStrength() {
