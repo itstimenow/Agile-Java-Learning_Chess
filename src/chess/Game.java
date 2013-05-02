@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.List;
 import pieces.Piece;
 import util.StringUtil;
 
@@ -114,5 +115,72 @@ public class Game {
         
         board.put(Piece.BLANK, originalPosition);
         board.put(piece, originalPosition.down());
+    }
+    
+    public double getBlackSideStrength() {
+        double strength = 0.0;
+        for (Piece piece : board.getBlackSidePieces())
+            strength += getStrength(piece);
+        
+        return strength;
+    }
+    
+    public double getWhiteSideStrength() {
+        double strength = 0.0;
+        for (Piece piece : board.getWhiteSidePieces())
+            strength += getStrength(piece);
+        
+        return strength;
+    }
+    
+    private double getStrength(Piece piece) {
+        Piece.Type type = piece.getType();
+        if (type != Piece.Type.PAWN)
+            return piece.getType().getPoints();
+        
+        return getStrengthOfPawn(piece);
+    }
+    
+    private double getStrengthOfPawn(Piece pawn) {
+        char file = pawn.getPosition().getFile();
+        boolean hasMultiplePawns = false;
+        
+        if (pawn.isBlack())
+            hasMultiplePawns = hasMultipleBlackPawnsInFile(file);
+        else
+            hasMultiplePawns = hasMultipleWhitePawnsInFile(file);
+        
+        if (hasMultiplePawns)
+            return 0.5;
+        else
+            return Piece.Type.PAWN.getPoints();
+    }
+    
+    private boolean hasMultipleBlackPawnsInFile(char file) {
+        return hasMultiplePawnsSatisfying(Piece.Color.BLACK, file);
+    }
+    
+    private boolean hasMultipleWhitePawnsInFile(char file) {
+        return hasMultiplePawnsSatisfying(Piece.Color.WHITE, file);
+    }
+    
+    private boolean hasMultiplePawnsSatisfying(Piece.Color color, char file) {
+        List<Piece> pieces;
+        if (color == Piece.Color.BLACK)
+            pieces = board.getBlackSidePieces();
+        else
+            pieces = board.getWhiteSidePieces();
+        
+        int pawnCount = 0;
+        for (Piece piece : pieces) {
+            if (piece.getType() == Piece.Type.PAWN
+                    && piece.getPosition().getFile() == file)
+                pawnCount++;
+        }
+        
+        if (pawnCount > 1)
+            return true;
+        else
+            return false;
     }
 }
