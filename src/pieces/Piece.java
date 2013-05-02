@@ -3,7 +3,8 @@ package pieces;
 import java.util.HashMap;
 import chess.Position;
 
-public class Piece implements Comparable<Piece> {
+public class Piece {
+    
     public enum Type {
         NO_PIECE('.', 0.0),
         PAWN('p', 1.0),
@@ -32,6 +33,7 @@ public class Piece implements Comparable<Piece> {
     
     public enum Color { WHITE, BLACK }
     
+    
     public static final Piece BLANK;
     static {
         BLANK = new Piece();
@@ -46,7 +48,6 @@ public class Piece implements Comparable<Piece> {
     private Color color;
     private Type type;
     private char representation;
-    private double strength;
     
     private Position position;
     
@@ -143,32 +144,8 @@ public class Piece implements Comparable<Piece> {
         return representation;
     }
     
-    public double getStrength() {
-        return strength;
-    }
-    
-    public void setStrength(double strength) {
-        this.strength = strength;
-    }
-    
     public Position getPosition() {
         return position;
-    }
-    
-    public int getPositionRank() {
-        return position.getRank();
-    }
-    
-    public char getPositionFile() {
-        return position.getFile();
-    }
-    
-    public int getPositionRow() {
-        return position.getRow();
-    }
-    
-    public int getPositionColumn() {
-        return position.getColumn();
     }
     
     public void setPosition(char file, int rank) {
@@ -185,26 +162,5 @@ public class Piece implements Comparable<Piece> {
     
     public boolean isWhite() {
         return color == Color.WHITE;
-    }
-    
-    public int compareTo(Piece that) {
-        double result = this.getStrength() * 10 - that.getStrength() * 10;
-        return (int)result;
-    }
-    
-    public void moveLeft() {
-        position = position.left();
-    }
-    
-    public void moveRight() {
-        position = position.right();
-    }
-    
-    public void moveUp() {
-        position = position.up();
-    }
-    
-    public void moveDown() {
-        position = position.down();
     }
 }

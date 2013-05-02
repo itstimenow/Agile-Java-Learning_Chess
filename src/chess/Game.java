@@ -18,16 +18,16 @@ public class Game {
     
     public void initialize() {
         // Only need to initialize rank #1, #2, #7, #8, since all ranks are by default empty
-        initializeRank1();
-        initializeRank2();
-        initializeRank7();
-        initializeRank8();
+        initializeRank01();
+        initializeRank02();
+        initializeRank07();
+        initializeRank08();
     }
     
     /**
      * Initializes rank #1, the white-side rank where the king is in.
      */
-    private void initializeRank1() {
+    private void initializeRank01() {
         int rank = 1;
         board.put(Piece.createWhiteRook(),   'a', rank);
         board.put(Piece.createWhiteKnight(), 'b', rank);
@@ -42,7 +42,7 @@ public class Game {
     /**
      * Initializes rank #2, the white-side rank where the pawn is in.
      */
-    private void initializeRank2() {
+    private void initializeRank02() {
         int rank = 2;
         for (char file : Board.FILES)
             board.put(Piece.createWhitePawn(), file, rank);
@@ -51,7 +51,7 @@ public class Game {
     /**
      * Initializes rank #7, the black-side rank where the pawn is in.
      */
-    private void initializeRank7() {
+    private void initializeRank07() {
         int rank = 7;
         for (char file : Board.FILES)
             board.put(Piece.createBlackPawn(), file, rank);
@@ -60,7 +60,7 @@ public class Game {
     /**
      * Initializes rank #8, the black-side rank where the king is in.
      */
-    private void initializeRank8() {
+    private void initializeRank08() {
         int rank = 8;
         board.put(Piece.createBlackRook(),   'a', rank);
         board.put(Piece.createBlackKnight(), 'b', rank);
@@ -142,13 +142,9 @@ public class Game {
     }
     
     private double getStrengthOfPawn(Piece pawn) {
+        Piece.Color color = pawn.getColor();
         char file = pawn.getPosition().getFile();
-        boolean hasMultiplePawns = false;
-        
-        if (pawn.isBlack())
-            hasMultiplePawns = hasMultipleBlackPawnsInFile(file);
-        else
-            hasMultiplePawns = hasMultipleWhitePawnsInFile(file);
+        boolean hasMultiplePawns = hasMultiplePawnsSatisfying(color, file);
         
         if (hasMultiplePawns)
             return 0.5;
@@ -156,20 +152,11 @@ public class Game {
             return Piece.Type.PAWN.getPoints();
     }
     
-    private boolean hasMultipleBlackPawnsInFile(char file) {
-        return hasMultiplePawnsSatisfying(Piece.Color.BLACK, file);
-    }
-    
-    private boolean hasMultipleWhitePawnsInFile(char file) {
-        return hasMultiplePawnsSatisfying(Piece.Color.WHITE, file);
-    }
-    
+    /**
+     * Checks that if there are multiple pawns of the specified color in the specified file
+     */
     private boolean hasMultiplePawnsSatisfying(Piece.Color color, char file) {
-        List<Piece> pieces;
-        if (color == Piece.Color.BLACK)
-            pieces = board.getBlackSidePieces();
-        else
-            pieces = board.getWhiteSidePieces();
+        List<Piece> pieces = board.getPiecesOfColor(color);
         
         int pawnCount = 0;
         for (Piece piece : pieces) {

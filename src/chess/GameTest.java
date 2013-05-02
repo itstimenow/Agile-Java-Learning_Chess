@@ -60,7 +60,10 @@ public class GameTest extends TestCase {
         assertEquals(king, board.getPieceAt('c', 2));
     }
     
-    public void testStrength() {
+    /**
+     * Some basic tests on strength
+     */
+    public void testStrength01() {
         // Verify strength of a fresh game
         game = new Game();
         assertEquals(0.0, game.getBlackSideStrength());
@@ -78,34 +81,6 @@ public class GameTest extends TestCase {
         verifySinglePieceStrength(Piece.Type.BISHOP, 3.0);
         verifySinglePieceStrength(Piece.Type.QUEEN,  9.0);
         verifySinglePieceStrength(Piece.Type.KING,   0.0);
-        
-        // ..............
-        game = new Game();
-        board = game.getBoard();
-        
-        // Black side
-        board.put(Piece.createBlackPawn(),      'b', 6);
-        board.put(Piece.createBlackQueen(),     'e', 6);
-        board.put(Piece.createBlackPawn(),      'a', 7);
-        board.put(Piece.createBlackPawn(),      'c', 7);
-        board.put(Piece.createBlackBishop(),    'd', 7);
-        board.put(Piece.createBlackKing(),      'b', 8);
-        board.put(Piece.createBlackRook(),      'c', 8);
-        assertEquals(20.0, game.getBlackSideStrength());
-        
-        // White side
-        board.put(Piece.createWhiteKnight(),    'f', 4);
-        board.put(Piece.createWhiteQueen(),     'g', 4);
-        board.put(Piece.createWhitePawn(),      'f', 3);
-        board.put(Piece.createWhitePawn(),      'h', 3);
-        board.put(Piece.createWhitePawn(),      'f', 2);
-        board.put(Piece.createWhitePawn(),      'g', 2);
-        board.put(Piece.createWhiteRook(),      'e', 1);
-        board.put(Piece.createWhiteKing(),      'f', 1);
-        assertEquals(19.5, game.getWhiteSideStrength());
-        
-        // Verify that strength of black side keep unchanged
-        assertEquals(20.0, board.getBlackSideStrength());
     }
     
     private void verifySinglePieceStrength(Piece.Type type, double expectedStrength) {
@@ -171,5 +146,37 @@ public class GameTest extends TestCase {
         pieces.add(blackPiece);
         pieces.add(whitePiece);
         return pieces;
+    }
+    
+    /**
+     * More complex tests on strength
+     */
+    public void testStrength02() {
+        game = new Game();
+        board = game.getBoard();
+        
+        // Black side
+        board.put(Piece.createBlackPawn(),      'b', 6);
+        board.put(Piece.createBlackQueen(),     'e', 6);
+        board.put(Piece.createBlackPawn(),      'g', 6);
+        board.put(Piece.createBlackPawn(),      'a', 7);
+        board.put(Piece.createBlackPawn(),      'c', 7);
+        board.put(Piece.createBlackBishop(),    'd', 7);
+        board.put(Piece.createBlackKing(),      'b', 8);
+        board.put(Piece.createBlackRook(),      'c', 8);
+        
+        // White side
+        board.put(Piece.createWhiteKnight(),    'f', 4);
+        board.put(Piece.createWhiteQueen(),     'g', 4);
+        board.put(Piece.createWhitePawn(),      'f', 3);
+        board.put(Piece.createWhitePawn(),      'h', 3);
+        board.put(Piece.createWhitePawn(),      'f', 2);
+        board.put(Piece.createWhitePawn(),      'g', 2);
+        board.put(Piece.createWhiteRook(),      'e', 1);
+        board.put(Piece.createWhiteKing(),      'f', 1);
+        
+        // Verify strength
+        assertEquals(21.0, game.getBlackSideStrength());
+        assertEquals(19.5, game.getWhiteSideStrength());
     }
 }

@@ -1,6 +1,8 @@
 package chess;
 
 import junit.framework.TestCase;
+import util.*;
+
 
 public class PositionTest extends TestCase {
     private Position position;
@@ -47,17 +49,7 @@ public class PositionTest extends TestCase {
         assertEquals(expectedFile, position.getFile());
         assertEquals(expectedRank, position.getRank());
         
-        assertEquals(convertToColumn(expectedFile), position.getColumn());
-        assertEquals(convertToRow(expectedRank), position.getRow());
-    }
-    
-    private int convertToColumn(char file) {
-        char firstFileLetter = 'a';
-        int column = Character.getNumericValue(file) - Character.getNumericValue(firstFileLetter);
-        return column;
-    }
-    
-    private int convertToRow(int rank) {
-        return rank - 1;
+        assertEquals(PositionUtil.convertToColumn(expectedFile), position.getColumn());
+        assertEquals(PositionUtil.convertToRow(expectedRank), position.getRow());
     }
 }

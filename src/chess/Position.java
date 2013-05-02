@@ -1,4 +1,5 @@
 package chess;
+import util.*;
 
 public class Position {
     private char file;
@@ -10,18 +11,8 @@ public class Position {
         this.file = file;
         this.rank = rank;
         
-        this.column = convertToColumn(file);
-        this.row = convertToRow(rank);
-    }
-    
-    private int convertToColumn(char file) {
-        char firstFileLetter = 'a';
-        int column = Character.getNumericValue(file) - Character.getNumericValue(firstFileLetter);
-        return column;
-    }
-    
-    private int convertToRow(int rank) {
-        return rank - 1;
+        this.column = PositionUtil.convertToColumn(file);
+        this.row = PositionUtil.convertToRow(rank);
     }
     
     public char getFile() {

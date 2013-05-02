@@ -55,7 +55,7 @@ public class PieceTest extends TestCase {
         assertEquals(3, Piece.getWhitePieceCount());
     }
     
-    public void testPieceType() {
+    public void testPieceTypeEnum() {
         assertEquals(0.0, Piece.Type.NO_PIECE.getPoints());
         assertEquals('.', Piece.Type.NO_PIECE.getCharacter());
         
@@ -80,36 +80,20 @@ public class PieceTest extends TestCase {
     
     public void testPiecePosition() {
         Piece piece = Piece.createBlackPawn();
-        piece.setPosition('d', 7);
         
-        assertEquals('d', piece.getPositionFile());
-        assertEquals(7, piece.getPositionRank());
-        
-        assertEquals(3, piece.getPositionColumn());
-        assertEquals(6, piece.getPositionRow());
-        
+        // One way to set position
         Position position = new Position('d', 7);
         piece.setPosition(position);
-        Position piecePosition = piece.getPosition();
-        assertEquals('d', piecePosition.getFile());
-        assertEquals(7, piecePosition.getRank());
-    }
-    
-    public void testMoveKing() {
-        Piece king = Piece.createWhiteKing();
-        king.setPosition('c', 2);
-        king.moveLeft();
-        verifyPosition(king, 'b', 2);
-        king.moveUp();
-        verifyPosition(king, 'b', 3);
-        king.moveRight();
-        verifyPosition(king, 'c', 3);
-        king.moveDown();
-        verifyPosition(king, 'c', 2);
+        verifyPosition(piece, 'd', 7);
+        
+        // Another way to set position
+        piece.setPosition('a', 5);
+        verifyPosition(piece, 'a', 5);
     }
     
     private void verifyPosition(Piece piece, char expectedFile, int expectedRank) {
-        assertEquals(expectedFile, piece.getPositionFile());
-        assertEquals(expectedRank, piece.getPositionRank());
+        Position position = piece.getPosition();
+        assertEquals(expectedFile, position.getFile());
+        assertEquals(expectedRank, position.getRank());
     }
 }
