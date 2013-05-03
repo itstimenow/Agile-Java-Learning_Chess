@@ -3,7 +3,7 @@ package chess;
 import java.util.List;
 import junit.framework.TestCase;
 import util.StringUtil;
-import pieces.Piece;
+import pieces.*;
 
 public class BoardTest extends TestCase {
     private Board board;
@@ -27,14 +27,14 @@ public class BoardTest extends TestCase {
         board.put(Piece.createWhitePawn(), 'c', 3);
         board.put(Piece.createWhitePawn(), 'c', 4);
         
-        int whitePawnNumber = board.getNumberOfPieces(Piece.Color.WHITE, Piece.Type.PAWN);
+        int whitePawnNumber = board.getNumberOfPieces(Piece.Color.WHITE, Pawn.class);
         assertEquals(3, whitePawnNumber);
         
         
         board.put(Piece.createBlackBishop(), 'a', 8);
         board.put(Piece.createBlackBishop(), 'b', 7);
         
-        int blackBishopNumber = board.getNumberOfPieces(Piece.Color.BLACK, Piece.Type.BISHOP);
+        int blackBishopNumber = board.getNumberOfPieces(Piece.Color.BLACK, Bishop.class);
         assertEquals(2, blackBishopNumber);
     }
     
@@ -43,13 +43,13 @@ public class BoardTest extends TestCase {
         int rank = 5;
         board.put(Piece.createBlackRook(), file, rank);
         Piece blackRook = board.getPieceAt(file, rank);
-        verifyPiece(blackRook, Piece.Color.BLACK, Piece.Type.ROOK);
+        verifyPiece(blackRook, Piece.Color.BLACK, Rook.class);
         
         file = 'e';
         rank = 8;
         board.put(Piece.createWhiteQueen(), file, rank);
         Piece whiteQueen = board.getPieceAt(file, rank);
-        verifyPiece(whiteQueen, Piece.Color.WHITE, Piece.Type.QUEEN);
+        verifyPiece(whiteQueen, Piece.Color.WHITE, Queen.class);
     }
     
     public void testRetrievePieceCollection() {
@@ -80,13 +80,13 @@ public class BoardTest extends TestCase {
         board.put(Piece.createWhiteKing(),  'c', 4);
         
         Piece piece = board.getPieceAt('b', 6);
-        verifyPiece(piece, Piece.Color.BLACK, Piece.Type.KING);
+        verifyPiece(piece, Piece.Color.BLACK, King.class);
         
         piece = board.getPieceAt('b', 5);
-        verifyPiece(piece, Piece.Color.BLACK, Piece.Type.ROOK);
+        verifyPiece(piece, Piece.Color.BLACK, Rook.class);
         
         piece = board.getPieceAt('c', 4);
-        verifyPiece(piece, Piece.Color.WHITE, Piece.Type.KING);
+        verifyPiece(piece, Piece.Color.WHITE, King.class);
     }
     
     public void testPutPiece02() {
@@ -99,14 +99,14 @@ public class BoardTest extends TestCase {
         board.put(Piece.createWhiteBishop(), position);
         
         Piece piece = board.getPieceAt('b', 6);
-        verifyPiece(piece, Piece.Color.BLACK, Piece.Type.KING);
+        verifyPiece(piece, Piece.Color.BLACK, King.class);
         
         piece = board.getPieceAt('c', 4);
-        verifyPiece(piece, Piece.Color.WHITE, Piece.Type.BISHOP);
+        verifyPiece(piece, Piece.Color.WHITE, Bishop.class);
     }
     
-    private void verifyPiece(Piece piece, Piece.Color color, Piece.Type type) {
-        assertEquals(color, piece.getColor());
-        assertEquals(type, piece.getType());
+    private void verifyPiece(Piece piece, Piece.Color expectedColor, Class expectedClass) {
+        assertEquals(expectedColor, piece.getColor());
+        assertEquals(expectedClass, piece.getClass());
     }
 }

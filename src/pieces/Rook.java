@@ -12,7 +12,7 @@ public class Rook extends Piece {
     }
     
     @Override
-    public Type getType() {
-        return Piece.Type.ROOK;
+    public boolean is(Class type) {
+        return type == Rook.class;
     }
 }

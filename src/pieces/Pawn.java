@@ -12,7 +12,7 @@ public class Pawn extends Piece {
     }
     
     @Override
-    public Type getType() {
-        return Piece.Type.PAWN;
+    public boolean is(Class type) {
+        return type == Pawn.class;
     }
 }

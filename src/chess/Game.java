@@ -1,7 +1,7 @@
 package chess;
 
 import java.util.List;
-import pieces.Piece;
+import pieces.*;
 import util.StringUtil;
 
 
@@ -166,11 +166,20 @@ public class Game {
     }
     
     private double getStrength(Piece piece) {
-        Piece.Type type = piece.getType();
-        if (type != Piece.Type.PAWN)
-            return piece.getType().getPoints();
-        
-        return getStrengthOfPawn(piece);
+        if (piece.is(King.class))
+            return 0.0;
+        else if (piece.is(Queen.class))
+            return 9.0;
+        else if (piece.is(Bishop.class))
+            return 3.0;
+        else if (piece.is(Knight.class))
+            return 2.5;
+        else if (piece.is(Rook.class))
+            return 5.0;
+        else if (piece.is(Pawn.class))
+            return getStrengthOfPawn(piece);
+        else
+            return 0.0;
     }
     
     private double getStrengthOfPawn(Piece pawn) {
@@ -181,7 +190,7 @@ public class Game {
         if (hasMultiplePawns)
             return 0.5;
         else
-            return Piece.Type.PAWN.getPoints();
+            return 1.0;
     }
     
     /**
@@ -192,8 +201,7 @@ public class Game {
         
         int pawnCount = 0;
         for (Piece piece : pieces) {
-            if (piece.getType() == Piece.Type.PAWN
-                    && piece.getPosition().getFile() == file)
+            if (piece.is(Pawn.class) && piece.getPosition().getFile() == file)
                 pawnCount++;
         }
         

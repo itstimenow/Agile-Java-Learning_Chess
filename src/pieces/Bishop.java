@@ -12,7 +12,7 @@ public class Bishop extends Piece {
     }
     
     @Override
-    public Type getType() {
-        return Piece.Type.BISHOP;
+    public boolean is(Class type) {
+        return type == Bishop.class;
     }
 }

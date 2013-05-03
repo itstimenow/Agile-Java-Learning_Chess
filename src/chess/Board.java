@@ -87,13 +87,13 @@ public class Board {
         return numberOfPieces;
     }
     
-    public int getNumberOfPieces(Piece.Color color, Piece.Type type) {
+    public int getNumberOfPieces(Piece.Color color, Class type) {
         int numberOfPieces = 0;
         
         for (Piece[] pieces : positionState) {
             for (Piece piece : pieces) {
                 if (piece == Piece.BLANK) continue;
-                if (piece.getColor() == color && piece.getType() == type)
+                if (piece.getColor() == color && piece.is(type))
                     ++numberOfPieces;
             }
         }

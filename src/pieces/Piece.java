@@ -7,40 +7,13 @@ import chess.Position;
 
 public class Piece {
     
-    public enum Type {
-        NO_PIECE('.', 0.0),
-        PAWN('p', 1.0),
-        ROOK('r', 5.0),
-        KNIGHT('n', 2.5),
-        BISHOP('b', 3.0),
-        QUEEN('q', 9.0),
-        KING('k', 0.0);
-        
-        private char character;
-        private double points;
-        
-        private Type(char character, double points) {
-            this.character = character;
-            this.points = points;
-        }
-        
-        public double getPoints() {
-            return points;
-        }
-        
-        public char getCharacter() {
-            return character;
-        }
-    }
-    
     public enum Color { WHITE, BLACK }
     
     
     public static final Piece BLANK;
     static {
         BLANK = new Piece();
-        BLANK.type = Type.NO_PIECE;
-        BLANK.representation = Type.NO_PIECE.getCharacter();
+        BLANK.representation = '.';
     }
     
     private static int blackPieceCount = 0;
@@ -48,7 +21,6 @@ public class Piece {
     
     
     protected Color color;
-    private Type type;
     protected char representation;
     
     private Position position;
@@ -116,23 +88,6 @@ public class Piece {
         return new King(Color.BLACK);
     }
     
-    private static Piece create(Color color, Type type) {
-        Piece piece = new Piece();
-        piece.color = color;
-        piece.type = type;
-                
-        if (color == Color.WHITE) {
-            piece.representation = type.getCharacter();
-            ++whitePieceCount;
-        }
-        if (color == Color.BLACK) {
-            piece.representation = Character.toUpperCase(type.getCharacter());
-            ++blackPieceCount;
-        }
-        
-        return piece;
-    }
-    
     public static int getBlackPieceCount() {
         return blackPieceCount;
     }
@@ -157,10 +112,6 @@ public class Piece {
     public Color getColor() {
         return color;
     }
-        
-    public Type getType() {
-        return type;
-    }
     
     public char getRepresentation() {
         return representation;
@@ -184,6 +135,13 @@ public class Piece {
     
     public boolean isWhite() {
         return color == Color.WHITE;
+    }
+    
+    /**
+     * Tests if the instance is of one specified type.
+     */
+    public boolean is(Class type) {
+        return type == Piece.class;
     }
     
     public List<String> getPossibleMoves() {

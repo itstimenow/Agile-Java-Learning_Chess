@@ -6,18 +6,31 @@ import junit.framework.TestCase;
 public class KnightTest extends TestCase {
 
     public void testCreate() {
-        verifyCreation(new Knight(Piece.Color.WHITE), new Knight(Piece.Color.BLACK),
-                       Piece.Type.KNIGHT, Piece.Type.KNIGHT.getCharacter());
+        Knight whiteKnight = new Knight(Piece.Color.WHITE);
+        Knight blackKnight = new Knight(Piece.Color.BLACK);
+        char expectedRepresentation = 'n';
+        Class expectedClass = Knight.class;
+        verifyCreation(whiteKnight, blackKnight, expectedRepresentation, expectedClass);
     }
     
-    private void verifyCreation(Piece whitePiece, Piece blackPiece,
-                                Piece.Type expectedType, char expectedRepresentation) {
+    private void verifyCreation(Piece whitePiece, Piece blackPiece, 
+                                char expectedRepresentation, Class expectedClass) {
         assertTrue(whitePiece.isWhite());
-        assertEquals(expectedType, whitePiece.getType());
         assertEquals(expectedRepresentation, whitePiece.getRepresentation());
+        verifyType(whitePiece);
         
         assertTrue(blackPiece.isBlack());
-        assertEquals(expectedType, blackPiece.getType());
         assertEquals(Character.toUpperCase(expectedRepresentation), blackPiece.getRepresentation());
+        verifyType(blackPiece);
+    }
+    
+    private void verifyType(Piece piece) {
+        assertTrue(piece.is(Knight.class));
+        
+        assertFalse(piece.is(King.class));
+        assertFalse(piece.is(Queen.class));
+        assertFalse(piece.is(Bishop.class));
+        assertFalse(piece.is(Rook.class));
+        assertFalse(piece.is(Pawn.class));
     }
 }

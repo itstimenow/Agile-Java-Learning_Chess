@@ -3,7 +3,7 @@ package chess;
 import java.util.*;
 import junit.framework.TestCase;
 import util.StringUtil;
-import pieces.Piece;
+import pieces.*;
 
 
 public class GameTest extends TestCase {
@@ -96,15 +96,15 @@ public class GameTest extends TestCase {
         assertEquals(38.0, game.getWhiteSideStrength());
         
         // Verify strength of each type of piece separately
-        verifySinglePieceStrength(Piece.Type.PAWN,   1.0);
-        verifySinglePieceStrength(Piece.Type.ROOK,   5.0);
-        verifySinglePieceStrength(Piece.Type.KNIGHT, 2.5);
-        verifySinglePieceStrength(Piece.Type.BISHOP, 3.0);
-        verifySinglePieceStrength(Piece.Type.QUEEN,  9.0);
-        verifySinglePieceStrength(Piece.Type.KING,   0.0);
+        verifySinglePieceStrength(Pawn.class,   1.0);
+        verifySinglePieceStrength(Rook.class,   5.0);
+        verifySinglePieceStrength(Knight.class, 2.5);
+        verifySinglePieceStrength(Bishop.class, 3.0);
+        verifySinglePieceStrength(Queen.class,  9.0);
+        verifySinglePieceStrength(King.class,   0.0);
     }
     
-    private void verifySinglePieceStrength(Piece.Type type, double expectedStrength) {
+    private void verifySinglePieceStrength(Class type, double expectedStrength) {
         Position position = new Position('a', 1);
         List<Piece> piecePair = createPiecesOfType(type);
         
@@ -124,43 +124,30 @@ public class GameTest extends TestCase {
     /**
      * Creates a pair of pieces of the specified type, the first one is black, the second white
      */
-    private List<Piece> createPiecesOfType(Piece.Type type) {
+    private List<Piece> createPiecesOfType(Class type) {
         Piece blackPiece, whitePiece;
         
-        switch (type) {
-            case PAWN:
-                blackPiece = Piece.createBlackPawn();
-                whitePiece = Piece.createWhitePawn();
-                break;
-                
-            case ROOK:
-                blackPiece = Piece.createBlackRook();
-                whitePiece = Piece.createWhiteRook();
-                break;
-                
-            case KNIGHT:
-                blackPiece = Piece.createBlackKnight();
-                whitePiece = Piece.createWhiteKnight();
-                break;
-                
-            case BISHOP:
-                blackPiece = Piece.createBlackBishop();
-                whitePiece = Piece.createWhiteBishop();
-                break;
-                
-            case QUEEN:
-                blackPiece = Piece.createBlackQueen();
-                whitePiece = Piece.createWhiteQueen();
-                break;
-                
-            case KING:
-                blackPiece = Piece.createBlackKing();
-                whitePiece = Piece.createWhiteKing();
-                break;
-                
-            default:
-                fail("Unsupported piece type!");
-                return null;
+        if (type == King.class) {
+            blackPiece = Piece.createBlackKing();
+            whitePiece = Piece.createWhiteKing();
+        } else if (type == Queen.class) {
+            blackPiece = Piece.createBlackQueen();
+            whitePiece = Piece.createWhiteQueen();
+        } else if (type == Bishop.class) {
+            blackPiece = Piece.createBlackBishop();
+            whitePiece = Piece.createWhiteBishop();
+        } else if (type == Knight.class) {
+            blackPiece = Piece.createBlackKnight();
+            whitePiece = Piece.createWhiteKnight();
+        } else if (type == Rook.class) {
+            blackPiece = Piece.createBlackRook();
+            whitePiece = Piece.createWhiteRook();
+        } else if (type == Pawn.class) {
+            blackPiece = Piece.createBlackPawn();
+            whitePiece = Piece.createWhitePawn();
+        } else {
+            fail("Unsupported piece type!");
+            return null;
         }
         
         ArrayList<Piece> pieces = new ArrayList<Piece>();

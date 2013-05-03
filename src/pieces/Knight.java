@@ -12,7 +12,7 @@ public class Knight extends Piece {
     }
     
     @Override
-    public Type getType() {
-        return Piece.Type.KNIGHT;
+    public boolean is(Class type) {
+        return type == Knight.class;
     }
 }
