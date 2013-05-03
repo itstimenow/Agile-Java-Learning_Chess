@@ -1,6 +1,8 @@
 package pieces;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import chess.Position;
 
 public class Piece {
@@ -45,61 +47,73 @@ public class Piece {
     private static int whitePieceCount = 0;
     
     
-    private Color color;
+    protected Color color;
     private Type type;
-    private char representation;
+    protected char representation;
     
     private Position position;
     
     
-    private Piece() {}
+    protected Piece() {}
     
     public static Piece createWhitePawn() {
-        return create(Color.WHITE, Type.PAWN);
+        incrementWhitePieceCount();
+        return new Pawn(Color.WHITE);
     }
     
     public static Piece createWhiteRook() {
-        return create(Color.WHITE, Type.ROOK);
+        incrementWhitePieceCount();
+        return new Rook(Color.WHITE);
     }
     
     public static Piece createWhiteKnight() {
-        return create(Color.WHITE, Type.KNIGHT);
+        whitePieceCount++;
+        return new Knight(Color.WHITE);
     }
     
     public static Piece createWhiteBishop() {
-        return create(Color.WHITE, Type.BISHOP);
+        incrementWhitePieceCount();
+        return new Bishop(Color.WHITE);
     }
     
     public static Piece createWhiteQueen() {
-        return create(Color.WHITE, Type.QUEEN);
+        incrementWhitePieceCount();
+        return new Queen(Color.WHITE);
     }
     
     public static Piece createWhiteKing() {
-        return create(Color.WHITE, Type.KING);
+        incrementWhitePieceCount();
+        return new King(Color.WHITE);
     }
     
     public static Piece createBlackPawn() {
-        return create(Color.BLACK, Type.PAWN);
+        incrementBlackPieceCount();
+        return new Pawn(Color.BLACK);
     }
     
     public static Piece createBlackRook() {
-        return create(Color.BLACK, Type.ROOK);
+        incrementBlackPieceCount();
+        return new Rook(Color.BLACK);
     }
     
     public static Piece createBlackKnight() {
-        return create(Color.BLACK, Type.KNIGHT);
+        incrementBlackPieceCount();
+        return new Knight(Color.BLACK);
     }
     
     public static Piece createBlackBishop() {
-        return create(Color.BLACK, Type.BISHOP);
+        incrementBlackPieceCount();
+        return new Bishop(Color.BLACK);
     }
     
     public static Piece createBlackQueen() {
-        return create(Color.BLACK, Type.QUEEN);
+        incrementBlackPieceCount();
+        return new Queen(Color.BLACK);
     }
     
     public static Piece createBlackKing() {
-        return create(Color.BLACK, Type.KING);
+        incrementBlackPieceCount();
+        return new King(Color.BLACK);
     }
     
     private static Piece create(Color color, Type type) {
@@ -132,6 +146,14 @@ public class Piece {
         whitePieceCount = 0;
     }
     
+    private static void incrementBlackPieceCount() {
+        blackPieceCount++;
+    }
+    
+    private static void incrementWhitePieceCount() {
+        whitePieceCount++;
+    }
+    
     public Color getColor() {
         return color;
     }
@@ -162,5 +184,9 @@ public class Piece {
     
     public boolean isWhite() {
         return color == Color.WHITE;
+    }
+    
+    public List<String> getPossibleMoves() {
+        return new ArrayList<String>();
     }
 }

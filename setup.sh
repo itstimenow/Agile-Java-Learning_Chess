@@ -115,5 +115,7 @@ export PS1="\W$ "
 cd $base_dir
 
 alias ge="gedit"
+alias GE="ge"
 alias runant="run_ant"
+alias RUNANT="runant"
 
