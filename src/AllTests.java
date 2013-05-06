@@ -6,7 +6,7 @@ public class AllTests {
         suite.addTest(chess.AllTests.suite());
         suite.addTest(pieces.AllTests.suite());
         suite.addTest(util.AllTests.suite());
-        suite.addTestSuite(CharacterTest.class);
+        suite.addTest(languageTest.AllTests.suite());
         return suite;
     }
 }

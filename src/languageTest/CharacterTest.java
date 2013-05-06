@@ -1,3 +1,5 @@
+package languageTest;
+
 import junit.framework.*;
 
 public class CharacterTest extends TestCase {
@@ -28,7 +30,7 @@ public class CharacterTest extends TestCase {
     
     public void testJavaIdentifierPart() {
         char[] acceptableChars = new char[] {
-            's', '$', '_', '8', 
+            's', '$', '_', '8',
             '\u2161',   // Roman numeral character
             '\u0300',   // Connecting character
             '\u0010'    // Ignorable character
