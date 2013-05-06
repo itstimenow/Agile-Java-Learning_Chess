@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class LoopTest extends TestCase {
     
-    public void testFactorialUsingWhile() {
+    public void testWhile() {
         assertEquals(1, factorialUsingWhile(0));
         assertEquals(1, factorialUsingWhile(1));
         assertEquals(2, factorialUsingWhile(2));
@@ -31,7 +31,7 @@ public class LoopTest extends TestCase {
         return fac;
     }
     
-    public void testFactorialUsingFor() {
+    public void testFor() {
         assertEquals(1, factorialUsingFor(0));
         assertEquals(1, factorialUsingFor(1));
         assertEquals(2, factorialUsingFor(2));
@@ -52,7 +52,7 @@ public class LoopTest extends TestCase {
         return fac;
     }
     
-    public void testFactorialUsingDo() {
+    public void testDoWhile() {
         assertEquals(1, factorialUsingDoWhile(0));
         assertEquals(1, factorialUsingDoWhile(1));
         assertEquals(2, factorialUsingDoWhile(2));
@@ -74,5 +74,24 @@ public class LoopTest extends TestCase {
         } while(i <= n);
         
         return fac;
+    }
+    
+    public void testContinue() {
+        assertEquals("1 2 3 4 5* 6 7 8 9 10* 11 12", sequence(12));
+    }
+    
+    private String sequence(int n) {
+        if (n < 1)
+            return "";
+        
+        StringBuilder builder = new StringBuilder();
+        for (int i = 1; i <= n; i++) {
+            builder.append(i);
+            if (i % 5 == 0)
+                builder.append('*');
+            if (i != n)
+                builder.append(' ');
+        }
+        return builder.toString();
     }
 }
