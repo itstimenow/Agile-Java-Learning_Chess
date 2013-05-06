@@ -59,6 +59,9 @@ public class BoardTest extends TestCase {
         board.put(Piece.createWhitePawn(),  'c', 3);
         board.put(Piece.createWhiteRook(),  'c', 4);
         
+        List<Piece> allPieces = board.getAllPieces();
+        assertEquals(5, allPieces.size());
+        
         List<Piece> blackSidePieces = board.getBlackSidePieces();
         assertEquals(2, blackSidePieces.size());
         

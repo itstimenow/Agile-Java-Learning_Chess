@@ -101,6 +101,18 @@ public class Board {
         return numberOfPieces;
     }
     
+    public List<Piece> getAllPieces() {
+        List<Piece> allPieces = new ArrayList<Piece>();
+        for (Piece[] pieceRank : positionState) {
+            for (Piece piece : pieceRank) {
+                if (piece != Piece.BLANK)
+                    allPieces.add(piece);
+            }
+        }
+        
+        return allPieces;
+    }
+    
     public List<Piece> getBlackSidePieces() {
         return blackSidePieces;
     }
