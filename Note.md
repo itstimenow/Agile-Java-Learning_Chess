@@ -1,1 +1,1 @@
-At present, client can modify the piece list retrieved from Board.getBlackSidePieces() or Board.getWhiteSidePieces(). For example, it can remove one piece without telling the board about it, which will corrupt the board.
+At present, client can modify the piece list retrieved from Board.getBlackSidePieces() or Board.getWhiteSidePieces() without acknowledging Board about the modification. For example, it can remove one piece from white-side-pieces outside Board class, which will corrupt the board.
