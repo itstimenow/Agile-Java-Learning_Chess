@@ -2,6 +2,7 @@ package languageTest;
 
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Iterator;
 import junit.framework.TestCase;
 
 public class LoopTest extends TestCase {
@@ -99,7 +100,7 @@ public class LoopTest extends TestCase {
     
     public void testVector() {
         String sequence = sequence(12);
-        Vector result = breakString(sequence);
+        Vector<String> result = breakString(sequence);
         
         assertEquals("1", result.get(0));
         assertEquals("2", result.get(1));
@@ -115,17 +116,17 @@ public class LoopTest extends TestCase {
         assertEquals("12", result.get(11));
         
         StringBuilder builder = new StringBuilder();
-        Enumeration enumeration = result.elements();
-        while (enumeration.hasMoreElements()) {
-            builder.append(enumeration.nextElement());
-            if (enumeration.hasMoreElements())
+        Iterator<String> it = result.iterator();
+        while (it.hasNext()) {
+            builder.append(it.next());
+            if (it.hasNext())
                 builder.append(' ');
         }
         assertEquals(sequence, builder.toString());
     }
     
-    private Vector breakString(String str) {
-        Vector result = new Vector();
+    private Vector<String> breakString(String str) {
+        Vector<String> result = new Vector<String>();
         String[] tokens = str.split(" ");
         for (String token : tokens)
             result.add(token);

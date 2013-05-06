@@ -13,11 +13,11 @@ public class PositionTest extends TestCase {
     public void setUp() {
         file = 'c';
         rank = 2;
-        position = new Position(file, rank);
+        position = Position.at(file, rank);
     }
     
     public void testCreate() {
-        Position position = new Position(file, rank);
+        Position position = Position.at(file, rank);
         verifyPosition(position, file, rank);
     }
     
@@ -71,5 +71,8 @@ public class PositionTest extends TestCase {
         
         assertEquals(PositionUtil.convertToColumn(expectedFile), position.getColumn());
         assertEquals(PositionUtil.convertToRow(expectedRank), position.getRow());
+        
+        // Verify equality
+        assertEquals(Position.at(expectedFile, expectedRank), position);
     }
 }

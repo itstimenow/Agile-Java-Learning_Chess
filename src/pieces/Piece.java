@@ -122,7 +122,7 @@ public class Piece {
     }
     
     public void setPosition(char file, int rank) {
-        position = new Position(file, rank);
+        position = Position.at(file, rank);
     }
     
     public void setPosition(Position position) {
@@ -144,7 +144,7 @@ public class Piece {
         return type == Piece.class;
     }
     
-    public List<String> getPossibleMoves() {
-        return new ArrayList<String>();
+    public List<Position> getPossibleMoves() {
+        return new ArrayList<Position>();
     }
 }

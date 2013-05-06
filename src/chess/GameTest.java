@@ -105,7 +105,7 @@ public class GameTest extends TestCase {
     }
     
     private void verifySinglePieceStrength(Class type, double expectedStrength) {
-        Position position = new Position('a', 1);
+        Position position = Position.at('a', 1);
         List<Piece> piecePair = createPiecesOfType(type);
         
         game = new Game();

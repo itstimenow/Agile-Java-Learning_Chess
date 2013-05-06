@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import chess.Position;
 
 public class PieceTest extends TestCase {
+    
     public void testCreate() {
         verifyCreation(Piece.createWhitePawn(), Piece.createBlackPawn(), Pawn.class, 'p');
         verifyCreation(Piece.createWhiteRook(), Piece.createBlackRook(), Rook.class, 'r');
@@ -51,7 +52,7 @@ public class PieceTest extends TestCase {
         Piece piece = Piece.createBlackPawn();
         
         // One way to set position
-        Position position = new Position('d', 7);
+        Position position = Position.at('d', 7);
         piece.setPosition(position);
         verifyPosition(piece, 'd', 7);
         

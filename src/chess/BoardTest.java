@@ -92,10 +92,10 @@ public class BoardTest extends TestCase {
     public void testPutPiece02() {
         board = Board.createEmptyBoard();
         
-        Position position = new Position('b', 6);
+        Position position = Position.at('b', 6);
         board.put(Piece.createBlackKing(), position);
         
-        position = new Position('c', 4);
+        position = Position.at('c', 4);
         board.put(Piece.createWhiteBishop(), position);
         
         Piece piece = board.getPieceAt('b', 6);

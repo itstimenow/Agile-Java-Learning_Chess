@@ -2,18 +2,33 @@ package chess;
 import util.*;
 
 public class Position {
+    
+    private static Position[][] allPositions = new Position[Board.ROW_COUNT][Board.COLUMN_COUNT];
+    
     private char file;
     private int rank;
     private int column;
     private int row;
     
-    public Position(char file, int rank) {
+    
+    private Position(char file, int rank) {
         this.file = file;
         this.rank = rank;
         
         this.column = PositionUtil.convertToColumn(file);
         this.row = PositionUtil.convertToRow(rank);
     }
+    
+    
+    public static Position at(char file, int rank) {
+        int row = PositionUtil.convertToRow(rank);
+        int column = PositionUtil.convertToColumn(file);
+        
+        if (allPositions[row][column] == null)
+            allPositions[row][column] = new Position(file, rank);
+        return allPositions[row][column];
+    }
+    
     
     public char getFile() {
         return file;
@@ -37,7 +52,7 @@ public class Position {
     
     public Position left(int offset) {
         char leftFile = (char)(this.file - offset);
-        return new Position(leftFile, rank);
+        return Position.at(leftFile, rank);
     }
     
     public Position right() {
@@ -46,7 +61,7 @@ public class Position {
     
     public Position right(int offset) {
         char rightFile = (char)(this.file + offset);
-        return new Position(rightFile, rank);
+        return Position.at(rightFile, rank);
     }
     
     public Position up() {
@@ -55,7 +70,7 @@ public class Position {
     
     public Position up(int offset) {
         int upRank = rank + offset;
-        return new Position(file, upRank);
+        return Position.at(file, upRank);
     }
     
     public Position down() {
@@ -64,6 +79,6 @@ public class Position {
     
     public Position down(int offset) {
         int downRank = rank - offset;
-        return new Position(file, downRank);
+        return Position.at(file, downRank);
     }
 }
