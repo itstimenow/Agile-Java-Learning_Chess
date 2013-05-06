@@ -1,5 +1,7 @@
 package languageTest;
 
+import java.util.Vector;
+import java.util.Enumeration;
 import junit.framework.TestCase;
 
 public class LoopTest extends TestCase {
@@ -93,5 +95,40 @@ public class LoopTest extends TestCase {
                 builder.append(' ');
         }
         return builder.toString();
+    }
+    
+    public void testVector() {
+        String sequence = sequence(12);
+        Vector result = breakString(sequence);
+        
+        assertEquals("1", result.get(0));
+        assertEquals("2", result.get(1));
+        assertEquals("3", result.get(2));
+        assertEquals("4", result.get(3));
+        assertEquals("5*", result.get(4));
+        assertEquals("6", result.get(5));
+        assertEquals("7", result.get(6));
+        assertEquals("8", result.get(7));
+        assertEquals("9", result.get(8));
+        assertEquals("10*", result.get(9));
+        assertEquals("11", result.get(10));
+        assertEquals("12", result.get(11));
+        
+        StringBuilder builder = new StringBuilder();
+        Enumeration enumeration = result.elements();
+        while (enumeration.hasMoreElements()) {
+            builder.append(enumeration.nextElement());
+            if (enumeration.hasMoreElements())
+                builder.append(' ');
+        }
+        assertEquals(sequence, builder.toString());
+    }
+    
+    private Vector breakString(String str) {
+        Vector result = new Vector();
+        String[] tokens = str.split(" ");
+        for (String token : tokens)
+            result.add(token);
+        return result;
     }
 }
