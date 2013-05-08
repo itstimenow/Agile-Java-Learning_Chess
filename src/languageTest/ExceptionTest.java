@@ -44,6 +44,20 @@ public class ExceptionTest extends TestCase {
         }
     }
     
+    public void testWithProblems() {
+        try {
+          doSomething();
+          fail("no exception");
+        }
+        catch (Exception success) {}
+    }
+    
+    // Exception is a checked exception, must caught it in the method body, 
+    // or declare it to be thrown
+    void doSomething() throws Exception {
+        throw new Exception("blah");
+    }
+    
     
     /*
     // compile, fail "caught wrong exception"
