@@ -8,6 +8,7 @@ public class AllTests {
         TestSuite suite = new TestSuite();
         suite.addTestSuite(CharacterTest.class);
         suite.addTestSuite(LoopTest.class);
+        suite.addTestSuite(ExceptionTest.class);
         return suite;
     }
 }
