@@ -35,4 +35,58 @@ public class LoggingTest extends TestCase {
         Logger logger = Logger.getAnonymousLogger();
         logger.warning(exceptionMessageBuilder.toString());
     }
+    
+    public void testLogCounter() {
+        Logger logger = Logger.getAnonymousLogger();        
+        LogCountHandler handler = new LogCountHandler();
+        logger.addHandler(handler);
+        
+        // set level to ALL so that all messages will be logged
+        logger.setLevel(Level.ALL);
+        handler.setLevel(Level.ALL);
+        
+        logger.severe("");
+        logger.warning("");
+        logger.warning("");
+        logger.warning("");
+        logger.info("");
+        logger.info("");
+        logger.info("");
+        logger.info("");
+        logger.finest("");
+        logger.finest("");
+        
+        assertEquals(1, handler.getCount(Level.SEVERE));
+        assertEquals(3, handler.getCount(Level.WARNING));
+        assertEquals(4, handler.getCount(Level.INFO));
+        assertEquals(0, handler.getCount(Level.CONFIG));
+        assertEquals(0, handler.getCount(Level.FINE));
+        assertEquals(0, handler.getCount(Level.FINER));
+        assertEquals(2, handler.getCount(Level.FINEST));
+    }
+    
+}
+
+class LogCountHandler extends Handler {
+    
+    private Map<Level, Integer> levelMessageCounter = new HashMap<Level, Integer>();
+    
+    @Override
+    public void publish(LogRecord record) {
+        Level level = record.getLevel();
+        int originalCount = getCount(level);
+        levelMessageCounter.put(level, originalCount + 1);
+    }
+    
+    public int getCount(Level level) {
+        if (levelMessageCounter.containsKey(level))
+            return levelMessageCounter.get(level);
+        return 0;
+    }
+    
+    @Override
+    public void flush() {}
+    
+    @Override
+    public void close() {}
 }
