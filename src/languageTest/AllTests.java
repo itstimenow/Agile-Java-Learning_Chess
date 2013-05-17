@@ -11,6 +11,7 @@ public class AllTests {
         suite.addTestSuite(ExceptionTest.class);
         suite.addTestSuite(LoggingTest.class);
         suite.addTestSuite(MapTest.class);
+        suite.addTest(languageTest.lesson10.AllTests.suite());
         return suite;
     }
 }
