@@ -1,5 +1,6 @@
 package languageTest.lesson10;
 
+import java.util.*;
 import junit.framework.*;
 
 
@@ -47,5 +48,38 @@ public class NumericTest extends TestCase {
     
     private void isNegativeInfinite(double value) {
         assertTrue(value == Double.NEGATIVE_INFINITY);
+    }
+    
+    public void testFloatDifferentBehavior() {
+        float a = 11.0f;
+        float b = 11.0f;
+        assertTrue(a == b);
+        
+        Float floatA = Float.valueOf(a);
+        Float floatB = Float.valueOf(b);
+        assertFalse(floatA == floatB);
+    }
+    
+    public void testDivisibleByThree() {
+        List<Integer> numbers = extractNumbersDivisibleByThree(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        List<Integer> expectedNumbers = Arrays.asList(new Integer[] { 3, 6, 9 });
+        assertEquals(expectedNumbers, numbers);
+    }
+    
+    private List<Integer> extractNumbersDivisibleByThree(int... numbers) {
+        List<Integer> result = new ArrayList<Integer>();
+        for (int number : numbers) {
+            if (isDivisible(number, 3))
+                result.add(number);
+        }
+        return result;
+    }
+    
+    private boolean isDivisible(int dividend, int diviser) {
+        int result = dividend / diviser;
+        if (result * diviser == dividend)
+            return true;
+        else
+            return false;
     }
 }
