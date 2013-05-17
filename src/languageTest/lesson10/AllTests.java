@@ -9,6 +9,7 @@ public class AllTests {
         TestSuite suite = new TestSuite();
         suite.addTestSuite(BigDecimalTest.class);
         suite.addTestSuite(NumericTest.class);
+        suite.addTestSuite(MathTest.class);
         return suite;
     }
 }

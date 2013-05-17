@@ -76,10 +76,21 @@ public class NumericTest extends TestCase {
     }
     
     private boolean isDivisible(int dividend, int diviser) {
-        int result = dividend / diviser;
-        if (result * diviser == dividend)
+        if (dividend / diviser * diviser == dividend)
             return true;
         else
             return false;
+    }
+    
+    public void testCastingToFloat() {
+        float x = 1;        // Weired, int can cast to float implicitly! Such casting will probably lose precision.
+                            // Maybe, it is because float can hold bigger numbers than int.
+        //float y = 1.0;    // This line of code doesn't work.
+        float z = (int)1.0;
+    }
+    
+    public void testCasting() {
+        int x = (int)1.9;
+        assertEquals(1, x);
     }
 }
