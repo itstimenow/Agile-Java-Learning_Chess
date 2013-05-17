@@ -10,6 +10,7 @@ public class AllTests {
         suite.addTestSuite(BigDecimalTest.class);
         suite.addTestSuite(NumericTest.class);
         suite.addTestSuite(MathTest.class);
+        suite.addTestSuite(RandomTest.class);
         return suite;
     }
 }

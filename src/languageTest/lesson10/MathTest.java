@@ -41,25 +41,4 @@ public class MathTest extends TestCase {
         assertEquals(-1 - 1, ~1);   // 1 + ~1 = -1 (-1: 1111 1111 1111 1111)
         assertEquals(-1, 100 + ~100);
     }
-    
-    public void testCustomRandom() {
-        final int start = 1;
-        final int end = 50;
-        
-        for (int i = 0; i < 50; i++) {
-            int value = random(start, end);
-            assertTrue(start <= value && value <= end);
-        }
-    }
-    
-    private int random(int start, int end) {
-        if (start > end)
-            throw new IllegalArgumentException("start should be less than or equal to end");
-        if (start == end)
-            return start;
-        
-        double increase = Math.random() * (end - start);
-        int increaseInt = (int)Math.round(increase);
-        return start + increaseInt;
-    }
 }
