@@ -11,6 +11,7 @@ public class AllTests {
         suite.addTestSuite(NumericTest.class);
         suite.addTestSuite(MathTest.class);
         suite.addTestSuite(RandomTest.class);
+        suite.addTestSuite(BitManipulationTest.class);
         return suite;
     }
 }

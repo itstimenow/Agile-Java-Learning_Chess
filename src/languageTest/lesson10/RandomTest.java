@@ -57,6 +57,11 @@ public class RandomTest extends TestCase {
         numbers.set(indexB, temp);
     }
     
+    
+    // ==========================================
+    // Inner types
+    // ==========================================
+    
     class Verifier {
         
         private List<Integer> oldNumberList;
